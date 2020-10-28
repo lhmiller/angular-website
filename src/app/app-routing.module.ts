@@ -1,8 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { IpComponent } from './ip/ip.component';
+import { PartComponent } from './part/part.component';
+import { WeatherComponent } from './weather/weather.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'ip',
+    children: [
+      { path: '', component: IpComponent },
+      { path: ':ip', component: IpComponent },
+    ]
+  },
+  { path: 'part', component: PartComponent },
+  { path: 'weather', component: WeatherComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
