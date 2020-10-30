@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { IpComponent } from './ip/ip.component';
 import { PartComponent } from './part/part.component';
 import { WeatherComponent } from './weather/weather.component';
+import { WeatherService } from './weather/weather.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,11 @@ import { WeatherComponent } from './weather/weather.component';
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    WeatherService,
+  ],
+  bootstrap: [
+    AppComponent,
+  ]
 })
 export class AppModule { }
