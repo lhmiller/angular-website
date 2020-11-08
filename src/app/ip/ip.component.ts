@@ -28,15 +28,15 @@ export class IpComponent implements OnInit {
     // TODO is this needed?
     const token = '?token=a96a29a2e3eb6f';
     // TODO figure out how to authenticate
-    this.http.get(ipUrl + token).subscribe(({
-      ip, hostname, org, region, country
+    this.http.get(ipUrl /*+ token*/).subscribe(({
+      ip, hostname, org, city, region, country
     }: any) => {
       this.ip = ip;
       if (hostname) {
         this.hostname = hostname;
       }
       this.org = org;
-      this.location = `${region}, ${country}`;
+      this.location = `${city} ${region} ${country}`;
     });
   }
 }
