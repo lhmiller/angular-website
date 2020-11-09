@@ -1,41 +1,33 @@
-<div id="main">
-  <div class="row">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <div class="input-group input-group-lg">
-        <input
-          [formControl]="partNum"
-          [ngClass]="{
-            'is-valid': partNum.valid,
-            'is-invalid': !partNum.valid }"
-          type="text"
-          class="form-control"
-          placeholder="Part number"
-          aria-label="Part number"
-          aria-describedby="button-addon2">
-      </div>
-      <br>
+<div class="part">
+  <div class="part__input input-group input-group-lg">
+    <input
+      [formControl]="partNum"
+      [ngClass]="{
+        'is-valid': partNum.valid,
+        'is-invalid': !partNum.valid }"
+      type="text"
+      class="form-control"
+      placeholder="Part number"
+      aria-label="Part number"
+      aria-describedby="button-addon2">
+  </div>
+  <ng-template [ngIf]="partNum.valid">
+    <div class="part__info">
       <h4 class="text-center">
         {{ part }}
       </h4>
       <h4 class="text-center">
         {{ group }}
       </h4>
-      <br>
-      <button
-        *ngFor="let site of sites"
-        type="button"
-        class="btn btn-secondary btn-lg btn-block"
-        (click)="searchSite(site.searchUrl)"
-        [disabled]="!partNum.valid">
-        {{ site.name }}
-      </button>
     </div>
-    <div class="col-sm-4"></div>
-  </div>
-</div>
-
-<div class="bg-info text-center footer">
-  <!-- TODO use css for bolding -->
-  <strong>&copy; 2019 Lucas Miller. All rights reserved.</strong>
+    <button
+      *ngFor="let site of sites"
+      type="button"
+      class="part__button btn btn-lg btn-block"
+      [ngClass]="site.buttonClass"
+      (click)="searchSite(site.searchUrl)"
+      [disabled]="!partNum.valid">
+      {{ site.name }}
+    </button>
+  </ng-template>
 </div>

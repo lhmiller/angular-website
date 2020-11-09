@@ -43,33 +43,41 @@ export const sites = [
   {
     name: 'RealOEM',
     searchUrl: 'https://www.realoem.com/bmw/enUS/partxref?q=',
+    buttonClass: 'btn-secondary',
   },
   {
     name: 'GetBMWParts',
     searchUrl: 'https://www.getbmwparts.com/search?search_str=',
+    buttonClass: 'btn-dark',
   },
   {
     name: 'FCP Euro',
     searchUrl: 'https://www.fcpeuro.com/products?utf8=%E2%9C%93&keywords=',
+    buttonClass: 'btn-info',
   },
   {
     name: 'ECS',
     searchUrl: 'https://www.ecstuning.com/Search/SiteSearch/',
+    buttonClass: 'btn-danger',
   },
   {
     name: 'BMWPartsPros',
     searchUrl: 'https://bmwpartspros.com/parts/index.cfm?make=BMW&action=oePartSearch&siteid=216857&searchText=',
+    buttonClass: 'btn-light',
   },
   {
     name: 'Google',
     searchUrl: 'https://www.google.com/search?q=',
+    buttonClass: 'btn-success',
   },
   {
     name: 'Amazon',
     searchUrl: 'https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=',
+    buttonClass: 'btn-warning',
   },
   {
     name: 'E90Post',
     searchUrl: 'https://www.e90post.com/forums/googlesearch.php?q=',
+    buttonClass: 'btn-primary',
   },
 ];

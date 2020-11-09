@@ -1,0 +1,5 @@
+@import 'src/scss/mixins';
+
+.ip {
+  @include componentBase;
+}
