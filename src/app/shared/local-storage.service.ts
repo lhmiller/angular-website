@@ -5,15 +5,7 @@ export class LocalStorageService {
   }
 
   set = (key: string, value: unknown) => {
-    let formattedValue: string;
-    switch (typeof value) {
-      case 'string':
-        formattedValue = value;
-        break;
-      default:
-        formattedValue = JSON.stringify(value);
-        break;
-    }
+    const formattedValue = JSON.stringify(value);
     localStorage.setItem(key, formattedValue);
   }
 
@@ -23,5 +15,9 @@ export class LocalStorageService {
 
   clear = () => {
     localStorage.clear();
+  }
+
+  length = () => {
+    return localStorage.length;
   }
 }

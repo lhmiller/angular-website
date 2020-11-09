@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { IpService } from './ip.service';
 
 @Component({
   selector: 'app-ip',
   templateUrl: './ip.component.html',
   styleUrls: ['./ip.component.scss']
 })
-export class IpComponent implements OnInit {
+export class IpComponent implements OnInit, OnDestroy {
   isOwnIp: boolean;
   ip: string;
   hostname: string;
   org: string;
   location: string;
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(private activatedRoute: ActivatedRoute,
-              private http: HttpClient) {}
+              private ipService: IpService) {}
 
   ngOnInit() {
     const ip = this.activatedRoute.snapshot.paramMap.get('ip');
@@ -23,20 +26,23 @@ export class IpComponent implements OnInit {
     this.getIpData(ip);
   }
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   getIpData(ipAddress: string) {
-    const ipUrl = `https://ipinfo.io/${ipAddress || ''}`;
-    // TODO is this needed?
-    const token = '?token=a96a29a2e3eb6f';
-    // TODO figure out how to authenticate
-    this.http.get(ipUrl /*+ token*/).subscribe(({
-      ip, hostname, org, city, region, country
-    }: any) => {
-      this.ip = ip;
-      if (hostname) {
-        this.hostname = hostname;
-      }
-      this.org = org;
-      this.location = `${city} ${region} ${country}`;
-    });
+    this.ipService.getIpInfo(ipAddress)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(({
+        ip, hostname, org, city, region, country
+      }: any) => {
+        this.ip = ip;
+        if (hostname) {
+          this.hostname = hostname;
+        }
+        this.org = org;
+        this.location = `${city} ${region} ${country}`;
+      });
   }
 }

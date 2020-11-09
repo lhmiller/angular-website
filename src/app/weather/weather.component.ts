@@ -4,14 +4,34 @@ import { takeUntil } from 'rxjs/operators';
 import { WeatherService } from './weather.service';
 
 interface WxData {
+  currently: {
+    apparentTemperature: number;
+    cloudCover: number;
+    currently: string;
+    humidity: number;
+    icon: string;
+    precipIntensity: number;
+    precipProbability: number;
+    precipType: string;
+    pressure: number;
+    summary: string;
+    temperature: number;
+    time: number;
+    uvIndex: number;
+    visibility: number;
+    windBearing: number;
+    windSpeed: number;
+  };
   daily: {
     data: Array<{
       sunriseTime: number;
       sunsetTime: number;
+      temperatureHigh: number;
+      temperatureLow: number;
     }>;
   };
-  currently: {
-    time: number;
+  hourly: {
+    data: Array<{}>;
   };
   results: Array<{
     address_components: Array<{
@@ -102,6 +122,28 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
   }
 
+  getWeather = (coords: string, locationName?: string) => {
+    this.wxData = null;
+    this.locationName = locationName;
+    this.isLoading = true;
+
+    this.weatherService.getWeather(coords)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data: WxData) => {
+        this.wxData = data;
+        console.log(this.wxData); // remove
+        this.sunrise = this.epochToDateTime(this.wxData.daily.data[0].sunriseTime);
+        this.sunset = this.epochToDateTime(this.wxData.daily.data[0].sunsetTime);
+        this.time = this.epochToDateTime(this.wxData.currently.time);
+
+        if (!locationName) {
+          // TODO how to chain subscribes?
+          this.updateLocationName(coords);
+        }
+        this.isLoading = false;
+      });
+  }
+
   getHourTitle = (element: any, i: number) => {
     const dateTime = this.epochToDateTime(element.time);
     if (i === 0) {
@@ -186,29 +228,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
   epochToDateTime = (epoch: number) => new Date(epoch * 1000);
 
-  private getWeather = (coordinates: string, locationName?: string) => {
-    this.wxData = null;
-    this.locationName = locationName;
-
-    this.weatherService.getWeather(coordinates)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data: WxData) => {
-        this.wxData = data;
-        console.log(this.wxData); // remove
-        this.sunrise = this.epochToDateTime(this.wxData.daily.data[0].sunriseTime);
-        this.sunset = this.epochToDateTime(this.wxData.daily.data[0].sunsetTime);
-        this.time = this.epochToDateTime(this.wxData.currently.time);
-
-        if (!locationName) {
-          // TODO how to chain subscribes?
-          this.updateLocationName(coordinates);
-        }
-        this.isLoading = false;
-      });
-  }
-
-  private updateLocationName = (coordinates: string) => {
-    this.weatherService.getLocationName(coordinates)
+  private updateLocationName = (coords: string) => {
+    this.weatherService.getLocationName(coords)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data: WxData) => {
         this.locationName = data.results[0].address_components[1].short_name;
