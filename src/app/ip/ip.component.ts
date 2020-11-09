@@ -31,7 +31,7 @@ export class IpComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  getIpData(ipAddress: string) {
+  getIpData = (ipAddress: string) => {
     this.ipService.getIpInfo(ipAddress)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(({

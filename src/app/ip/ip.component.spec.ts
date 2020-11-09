@@ -25,8 +25,8 @@ describe('IpComponent', () => {
   let component: IpComponent;
   let fixture: ComponentFixture<IpComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [IpComponent],
       providers: [
         { provide: IpService, useClass: MockIpService },

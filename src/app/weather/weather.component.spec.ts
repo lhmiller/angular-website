@@ -13,8 +13,8 @@ describe('WeatherComponent', () => {
   let component: WeatherComponent;
   let fixture: ComponentFixture<WeatherComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [WeatherComponent],
       providers: [
         { provide: WeatherService, useClass: MockWeatherService },
