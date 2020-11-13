@@ -35,4 +35,4 @@ import { WeatherService } from './weather/weather.service';
     AppComponent,
   ],
 })
-export class AppModule { }
+export class AppModule {}

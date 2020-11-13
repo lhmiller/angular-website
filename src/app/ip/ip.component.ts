@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,11 +10,11 @@ import { IpService } from './ip.service';
   styleUrls: ['./ip.component.scss']
 })
 export class IpComponent implements OnInit, OnDestroy {
-  isOwnIp: boolean;
-  ip: string;
-  hostname: string;
-  org: string;
-  location: string;
+  @Input() isOwnIp: boolean;
+  @Input() ip: string;
+  @Input() hostname: string;
+  @Input() org: string;
+  @Input() location: string;
   private ngUnsubscribe = new Subject<void>();
 
   constructor(private activatedRoute: ActivatedRoute,

@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "playground": "angular-playground"
   },
   "private": true,
   "dependencies": {
@@ -31,9 +32,10 @@
     "@angular/cli": "~10.2.0",
     "@angular/compiler-cli": "~10.2.2",
     "@angular/language-service": "~10.2.2",
-    "@types/node": "^12.11.1",
     "@types/jasmine": "~3.6.1",
     "@types/jasminewd2": "~2.0.8",
+    "@types/node": "^12.11.1",
+    "angular-playground": "^7.1.1",
     "codelyzer": "^5.1.2",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
