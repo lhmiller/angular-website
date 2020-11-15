@@ -3,7 +3,7 @@ import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
 
 describe('CacheService', () => {
-  let service: CacheService;
+  let service: CacheService<any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

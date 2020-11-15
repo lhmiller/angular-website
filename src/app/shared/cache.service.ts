@@ -6,14 +6,14 @@ import { LocalStorageService } from './local-storage.service';
 const CACHE_TTL_MS = 2 * 60 * 1000;
 
 @Injectable()
-export class CacheService {
+export class CacheService<T> {
   constructor(private storageService: LocalStorageService) {}
 
-  get = (key: string) => {
+  get = (key: string): T => {
     return this.storageService.get(key);
   }
 
-  set = (key: string, value: unknown) => {
+  set = (key: string, value: T) => {
     const { timestampKey, now } = this.getCommonVars(key);
     this.storageService.set(key, value);
     this.storageService.set(timestampKey, now);
@@ -38,7 +38,7 @@ export class CacheService {
     return (now - timestamp) > CACHE_TTL_MS;
   }
 
-  valueChanged = (key: string, comparatorFn: (oldValue: unknown) => boolean) =>
+  valueChanged = (key: string, comparatorFn: (oldValue: T) => boolean) =>
     comparatorFn(this.get(key))
 
   length = () => this.storageService.length();

@@ -57,7 +57,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
     this.geolocationService.getAddress(this.locationName)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(({ lat, long, address }) => {
-        // TODO chain subscribes
         this.getWeather(`${lat},${long}`, address);
       });
   }
@@ -84,7 +83,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
         this.time = time;
 
         if (!locationName) {
-          // TODO how to chain subscribes?
           this.updateLocationName(coords);
         }
         this.isLoading = false;

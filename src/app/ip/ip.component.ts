@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -6,6 +6,11 @@ import { CacheService } from '../shared/cache.service';
 import { IpService } from './services/ip.service';
 
 const IP_DATA_KEY = 'IP_DATA';
+
+interface CachedIpData {
+  ipAddress: string;
+  data: IpData;
+}
 
 interface IpData {
   ip: string;
@@ -31,7 +36,7 @@ export class IpComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute,
               private ipService: IpService,
-              private cacheService: CacheService) {}
+              private cacheService: CacheService<CachedIpData>) {}
 
   ngOnInit() {
     const ip = this.activatedRoute.snapshot.paramMap.get('ip');
@@ -45,7 +50,8 @@ export class IpComponent implements OnInit, OnDestroy {
   }
 
   getIpData = (ipAddress: string) => {
-    const valueChanged = (oldValue: IpData) => ipAddress === oldValue.ip;
+    const valueChanged = (oldValue: CachedIpData) =>
+      ipAddress === oldValue.ipAddress;
     if (this.cacheService.valueChanged(IP_DATA_KEY, valueChanged)
         || this.cacheService.isExpired(IP_DATA_KEY)) {
       // if new ip address, or cached value expired, save new value
@@ -53,11 +59,15 @@ export class IpComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((ipData: IpData) => {
           this.setIpData(ipData);
-          this.cacheService.set(IP_DATA_KEY, ipData);
+          const cacheEntry: CachedIpData = {
+            ipAddress,
+            data: ipData,
+          };
+          this.cacheService.set(IP_DATA_KEY, cacheEntry);
         });
     } else {
       // else (same ip address & non expired) use stored value
-      this.setIpData(this.cacheService.get(IP_DATA_KEY));
+      this.setIpData(this.cacheService.get(IP_DATA_KEY).data);
     }
   }
 
