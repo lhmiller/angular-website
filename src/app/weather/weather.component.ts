@@ -40,6 +40,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   constructor(private geolocationService: GeolocationService) {}
 
   ngOnInit() {
+    // TODO use cache service for weather data
     this.getLocation();
   }
 

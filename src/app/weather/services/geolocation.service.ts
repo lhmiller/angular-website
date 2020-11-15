@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-// TODO use `scheduled` instead of `of`
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { epochToDateTime, WxData } from '../weather-utils';
