@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { IpComponent } from './ip.component';
-import { IpService } from './ip.service';
+import { IpService } from './services/ip.service';
 
 class MockIpService {
   getIpInfo = () => of({

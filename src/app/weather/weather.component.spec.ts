@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { WeatherComponent } from './weather.component';
-import { WeatherService } from './weather.service';
+import { GeolocationService } from './services/geolocation.service';
 
-class MockWeatherService {
+class MockGeolocationService {
   getAddress = () => of({});
   getWeather = () => of({});
   getLocationName = () => of({});
+  getCurrentPosition = () => of('');
 }
 
 describe('WeatherComponent', () => {
@@ -17,7 +18,7 @@ describe('WeatherComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [WeatherComponent],
       providers: [
-        { provide: WeatherService, useClass: MockWeatherService },
+        { provide: GeolocationService, useClass: MockGeolocationService },
       ]
     })
     .compileComponents();
@@ -26,8 +27,6 @@ describe('WeatherComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WeatherComponent);
     component = fixture.componentInstance;
-    // mock function (called on init) so navigator.geolocation.getCurrentPosition is not called
-    component.getLocation = () => {};
     fixture.detectChanges();
   });
 

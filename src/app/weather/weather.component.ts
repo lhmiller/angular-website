@@ -1,44 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { WeatherService } from './weather.service';
-
-interface WxData {
-  currently: {
-    apparentTemperature: number;
-    cloudCover: number;
-    currently: string;
-    humidity: number;
-    icon: string;
-    precipIntensity: number;
-    precipProbability: number;
-    precipType: string;
-    pressure: number;
-    summary: string;
-    temperature: number;
-    time: number;
-    uvIndex: number;
-    visibility: number;
-    windBearing: number;
-    windSpeed: number;
-  };
-  daily: {
-    data: Array<{
-      sunriseTime: number;
-      sunsetTime: number;
-      temperatureHigh: number;
-      temperatureLow: number;
-    }>;
-  };
-  hourly: {
-    data: Array<{}>;
-  };
-  results: Array<{
-    address_components: Array<{
-      short_name: string;
-    }>;
-  }>;
-}
+import { epochToDateTime, WxData } from './weather-utils';
+import { GeolocationService } from './services/geolocation.service';
 
 @Component({
   selector: 'app-weather',
@@ -73,7 +37,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   round = Math.round;
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private weatherService: WeatherService) {}
+  constructor(private geolocationService: GeolocationService) {}
 
   ngOnInit() {
     this.getLocation();
@@ -89,37 +53,20 @@ export class WeatherComponent implements OnInit, OnDestroy {
     this.locationName = newLocationName;
     this.isLoading = true;
 
-    this.weatherService.getAddress(this.locationName)
+    this.geolocationService.getAddress(this.locationName)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data: any) => {
-        const lat = data.results[0].geometry.location.lat;
-        const long = data.results[0].geometry.location.lng;
-        const address = data.results[0].formatted_address;
+      .subscribe(({ lat, long, address }) => {
         // TODO chain subscribes
         this.getWeather(`${lat},${long}`, address);
       });
   }
 
   getLocation = () => {
-    if (navigator.geolocation) {
-      this.isLoading = true;
-
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const latLong = `${pos.coords.latitude},${pos.coords.longitude}`;
-          this.getWeather(latLong);
-        },
-        (err) => {
-          console.warn(err);
-          this.getWeather('35.2555507,-120.6849783');
-        }, {
-        enableHighAccuracy: true,
-        timeout: 30000,
-        maximumAge: 0
+    this.geolocationService.getCurrentPosition()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((latLong: string) => {
+        this.getWeather(latLong);
       });
-    } else {
-      alert('Could not determine your geolocation.');
-    }
   }
 
   getWeather = (coords: string, locationName?: string) => {
@@ -127,14 +74,13 @@ export class WeatherComponent implements OnInit, OnDestroy {
     this.locationName = locationName;
     this.isLoading = true;
 
-    this.weatherService.getWeather(coords)
+    this.geolocationService.getWeather(coords)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data: WxData) => {
+      .subscribe(({ data, sunrise, sunset, time }) => {
         this.wxData = data;
-        console.log(this.wxData); // remove
-        this.sunrise = this.epochToDateTime(this.wxData.daily.data[0].sunriseTime);
-        this.sunset = this.epochToDateTime(this.wxData.daily.data[0].sunsetTime);
-        this.time = this.epochToDateTime(this.wxData.currently.time);
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+        this.time = time;
 
         if (!locationName) {
           // TODO how to chain subscribes?
@@ -145,7 +91,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   getHourTitle = (element: any, i: number) => {
-    const dateTime = this.epochToDateTime(element.time);
+    const dateTime = epochToDateTime(element.time);
     if (i === 0) {
       return 'Now';
     } else if (dateTime.getHours() === 0) {
@@ -168,13 +114,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
       num = hour === 12 ? 12 : hour - 12;
       ampm = 'PM';
     }
-    return `${num}:${minuteFormatted}<small>${ampm}</small>`;
+    return `${num}${minuteFormatted}<small>${ampm}</small>`;
   }
 
-  getDayName = (day) => {
-    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return weekdays[day];
-  }
+  getDayNameFromEpoch = (epoch: number) => this.getDayName(epochToDateTime(epoch).getDay());
 
   windDirection = (bearing: number) => {
     switch (Math.round(bearing / 22.5)) {
@@ -226,13 +169,16 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
   }
 
-  epochToDateTime = (epoch: number) => new Date(epoch * 1000);
-
   private updateLocationName = (coords: string) => {
-    this.weatherService.getLocationName(coords)
+    this.geolocationService.getLocationName(coords)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data: WxData) => {
-        this.locationName = data.results[0].address_components[1].short_name;
+      .subscribe((locationName: string) => {
+        this.locationName = locationName;
       });
+  }
+
+  private getDayName = (day: number) => {
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return weekdays[day];
   }
 }

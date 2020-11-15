@@ -44,7 +44,7 @@
   <div id="today" class="d-flex">
     <div class="p-2 align-self-center">
       <h4>
-        {{ getDayName(epochToDateTime(wxData.currently.time).getDay()) }}
+        {{ getDayNameFromEpoch(wxData.currently.time) }}
         <!-- TODO size in css -->
         <small><small><small>TODAY</small></small></small>
       </h4>
@@ -87,7 +87,7 @@
       <tbody id="tbDaily">
         <tr *ngFor="let element of wxData.daily.data; index as i">
           <td class="h5">
-            {{ getDayName(epochToDateTime(element.time).getDay()) }}
+            {{ getDayNameFromEpoch(element.time) }}
           </td>
           <td>
             <img src="icons/{{ element.icon }}.png" height="28" />

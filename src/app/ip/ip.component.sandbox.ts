@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { sandboxOf } from 'angular-playground';
 import { IpComponent } from './ip.component';
-import { IpService } from './ip.service';
+import { IpService } from './services/ip.service';
 
 class MockIpService {
   getIpInfo = () => ({
@@ -30,6 +30,7 @@ export default sandboxOf(IpComponent, {
         [location]="location">
       </app-ip>`,
     context: {
+      // TODO pass props through mock service?
       isOwnIp: true,
       ip: '1.2.3.4',
       hostname: 'My hostname!',
