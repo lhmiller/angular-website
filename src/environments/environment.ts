@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  weatherBaseUrl: 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/3a62fe93bd0d5aeb142409a6a07a1e0d/',
 };
 
 /*

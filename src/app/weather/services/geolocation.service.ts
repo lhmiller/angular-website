@@ -3,16 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { epochToDateTime, WxData } from '../weather-utils';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class GeolocationService {
   constructor(private http: HttpClient) {}
 
   getWeather = (coordinates: string) => {
-    // TODO add prod/dev config for this url
-    // const baseUrl = 'https://linode.lucashmiller.com:7443/https://api.darksky.net/forecast/3a62fe93bd0d5aeb142409a6a07a1e0d/';
-    const baseUrl = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/3a62fe93bd0d5aeb142409a6a07a1e0d/';
-    return this.http.get(baseUrl + coordinates).pipe(
+    return this.http.get(environment.weatherBaseUrl + coordinates).pipe(
       map((data: WxData) => {
         const sunrise = epochToDateTime(data.daily.data[0].sunriseTime);
         const sunset = epochToDateTime(data.daily.data[0].sunsetTime);
