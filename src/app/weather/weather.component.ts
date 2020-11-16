@@ -70,7 +70,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   getWeather = (coords: string, locationName?: string) => {
-    this.wxData = null;
     this.locationName = locationName;
     this.isLoading = true;
 
@@ -95,7 +94,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
       return 'Now';
     } else if (dateTime.getHours() === 0) {
       // for the first hour of a day, show the day name
-      return '<strong>' + this.getDayName(dateTime.getDay()).substr(0, 3) + '</strong>';
+      return `<strong>${this.getDayName(dateTime.getDay()).substr(0, 3)}</strong>`;
     } else {
       return this.formatTime(dateTime.getHours());
     }
@@ -161,10 +160,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
   getLoadingMessage = () => {
     const { locationName, isLoading } = this;
-    if (isLoading) {
+    if (isLoading || !locationName) {
       return `Loading${locationName ? (' ' + locationName) : '' }...`;
     } else {
-      return locationName || 'Unknown Location';
+      return locationName;
     }
   }
 

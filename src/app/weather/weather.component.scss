@@ -2,4 +2,42 @@
 
 .weather {
   @include componentBase;
+  background-color: #060606;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  text-align: center;
+
+  &__locationName {
+    text-align: center;
+  }
+
+  &__currentTemp {
+    margin-left: 20px;
+    vertical-align: middle; // TODO can remove?
+  }
+
+  &__today {
+    margin: 0 auto;
+    max-width: 400px;
+  }
+
+  &__table {
+    margin: 0 auto;
+    max-width: 600px;
+
+    &--borderless td {
+      border: 0;
+    }
+
+    &--faintBorder td {
+      border-color: #282828;
+    }
+  }
+}
+
+// TODO find a better way for this
+table td {
+  color: white;
+  text-align: center;
+  vertical-align: middle;
 }

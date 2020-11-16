@@ -6,253 +6,249 @@
     <title>Weather</title>
 </head> -->
 
-<!-- TODO better way to do this? (repeated header from below) -->
-<h3
-  *ngIf="!wxData"
-  class="text-center"
-  id="locationName"
-  (click)="wxEntry();">
-  {{ getLoadingMessage() }}
-</h3>
-
-<div
-  *ngIf="wxData"
-  class="text-center"
-  id="weather">
-
-  <br>
-
-  <!-- TODO add icons -->
-  <h1>
-    <img
-      src="icons/{{ wxData.currently.icon }}.png"
-      width="88" />
-    <span id="temp">
-      {{ round(wxData.currently.temperature) }}&deg;
-    </span>
-  </h1>
-  <h5>
-    {{ wxData.currently.summary }}
-  </h5>
+<div class="weather">
   <h3
-    class="text-center"
-    id="locationName"
+    *ngIf="(isLoading || !wxData); else allWeather"
+    class="weather__locationName"
     (click)="wxEntry();">
     {{ getLoadingMessage() }}
   </h3>
 
-  <div id="today" class="d-flex">
-    <div class="p-2 align-self-center">
-      <h4>
-        {{ getDayNameFromEpoch(wxData.currently.time) }}
-        <!-- TODO size in css -->
-        <small><small><small>TODAY</small></small></small>
-      </h4>
-    </div>
-    <div class="ml-auto p-2 align-self-center">
-      <h4>
-        {{ round(wxData.daily.data[0].temperatureHigh) }}&deg;
-      </h4>
-    </div>
-    <div class="p-2 align-self-center">
-      <h4 class="text-muted">
-        {{ round(wxData.daily.data[0].temperatureLow) }}&deg;
-      </h4>
-    </div>
-  </div>
-
-  <h5>Next 48 Hours</h5>
-  <div class="table-responsive pageCenter">
-    <table class="table pageCenter">
-      <tbody id="tbHourlyHorizontal">
-        <tr *ngFor="let element of wxData.hourly.data; index as i">
-          <td>
-            <div> <!-- <big> -->
-              <div>{{ getHourTitle(element, i) }}</div>
-              <div>
-                <img src="icons/{{ element.icon }}.png" height="24" />
-              </div>
-              <div>{{ round(element.temperature) }}&deg;</div>
-            </div> <!-- </big> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <br>
-
-  <div>
-    <table class="table table-sm pageCenter table-borderless">
-      <tbody id="tbDaily">
-        <tr *ngFor="let element of wxData.daily.data; index as i">
-          <td class="h5">
-            {{ getDayNameFromEpoch(element.time) }}
-          </td>
-          <td>
-            <img src="icons/{{ element.icon }}.png" height="28" />
-          </td>
-          <td class="h5">
-            {{ round(element.precipProbability * 10) * 10 }}
-            <small>&#37;</small>
-          </td>
-          <td class="h5">
-            {{ round(element.temperatureHigh) }}&deg;
-          </td>
-          <td class="h5 text-muted">
-            {{ round(element.temperatureLow) }}&deg;
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  <br>
-
-  <div>
-    <table class="table table-sm pageCenter">
-      <tbody id="tbCurrentlyData">
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              sunrise
-            </div>
-            <div>
-              <h4>{{ formatTime(sunrise.getHours(), sunrise.getMinutes()) }}</h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              sunset
-            </div>
-            <div>
-              <h4>{{ formatTime(sunset.getHours(), sunset.getMinutes()) }}</h4>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              chance of {{ wxData.currently.precipType ? wxData.currently.precipType : "rain" }}
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              humidity
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              wind
-            </div>
-            <div>
-              <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}&nbsp;mph</h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              feels like
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              precipitation
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              pressure
-            </div>
-            <div>
-              <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              visibility
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              uv index
-            </div>
-            <div>
-              <h4>{{ wxData.currently.uvIndex }}</h4>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="text-muted text-uppercase">
-              cloud cover
-            </div>
-            <div>
-              <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
-            </div>
-          </td>
-          <td>
-            <div class="text-muted text-uppercase">
-              time
-            </div>
-            <div>
-              <h4>{{ formatTime(time.getHours(), time.getMinutes()) }}</h4>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <br>
-
-  <div class="btn-group">
-    <button
-      class="btn btn-warning btn-sm"
-      type="button"
-      (click)="wxEntry();">
-      Change Location
-    </button>
-    <button
-      type="button"
-      class="btn btn-sm btn-warning dropdown-toggle dropdown-toggle-split"
-      data-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false">
-      <span class="sr-only">
-        Toggle Dropdown
+  <ng-template #allWeather>
+    <h1>
+      <img
+        src="assets/icons/{{ wxData.currently.icon }}.png"
+        width="88" />
+      <span class="weather__currentTemp">
+        {{ round(wxData.currently.temperature) }}&deg;
       </span>
-    </button>
-    <div class="dropdown-menu">
-      <a
-        *ngFor="let option of locationDropdownOptions"
-        class="dropdown-item"
-        (click)="getWeather(option.coords);">
-        {{ option.text }}
-      </a>
+    </h1>
+    <h5>
+      {{ wxData.currently.summary }}
+    </h5>
+    <h3
+      class="weather__locationName"
+      (click)="wxEntry();">
+      {{ getLoadingMessage() }}
+    </h3>
+
+    <div class="weather__today d-flex">
+      <div class="p-2 align-self-center">
+        <h4>
+          {{ getDayNameFromEpoch(wxData.currently.time) }}
+          <!-- TODO size in css -->
+          <small><small><small>TODAY</small></small></small>
+        </h4>
+      </div>
+      <div class="ml-auto p-2 align-self-center">
+        <h4>
+          {{ round(wxData.daily.data[0].temperatureHigh) }}&deg;
+        </h4>
+      </div>
+      <div class="p-2 align-self-center">
+        <h4 class="text-muted">
+          {{ round(wxData.daily.data[0].temperatureLow) }}&deg;
+        </h4>
+      </div>
     </div>
-  </div>
 
-  <br>
+    <h5>Next 48 Hours</h5>
+    <div class="table-responsive weather__table weather__table--faintBorder">
+      <table class="table weather__table">
+        <tbody>
+          <tr>
+            <td *ngFor="let element of wxData.hourly.data; index as i">
+              <div> <!-- <big> -->
+                <div [innerHTML]="getHourTitle(element, i)"></div>
+                <div>
+                  <img src="assets/icons/{{ element.icon }}.png" height="24" />
+                </div>
+                <div>{{ round(element.temperature) }}&deg;</div>
+                <div [ngStyle]="{ whiteSpace: 'nowrap' }">
+                  {{ round(element.precipProbability * 100) }}<small>%</small>
+                </div>
+                <div [ngStyle]="{ whiteSpace: 'nowrap' }">
+                  {{ round(element.windSpeed) }}<small>MPH</small>
+                </div>
+              </div> <!-- </big> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <br>
 
+    <div>
+      <table class="table table-sm weather__table weather__table--borderless">
+        <tbody id="tbDaily">
+          <tr *ngFor="let element of wxData.daily.data; index as i">
+            <td class="h5">
+              {{ getDayNameFromEpoch(element.time) }}
+            </td>
+            <td>
+              <img src="assets/icons/{{ element.icon }}.png" height="28" />
+            </td>
+            <td class="h5">
+              {{ round(element.precipProbability * 10) * 10 }}
+              <small>&#37;</small>
+            </td>
+            <td class="h5">
+              {{ round(element.temperatureHigh) }}&deg;
+            </td>
+            <td class="h5 text-muted">
+              {{ round(element.temperatureLow) }}&deg;
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <br>
+
+    <div>
+      <table class="table table-sm weather__table weather__table--faintBorder">
+        <tbody id="tbCurrentlyData">
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                sunrise
+              </div>
+              <div>
+                <!-- TODO dont use inner HTML property -->
+                <h4 [innerHTML]="formatTime(sunrise.getHours(), sunrise.getMinutes())"></h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                sunset
+              </div>
+              <div>
+                <h4 [innerHTML]="formatTime(sunset.getHours(), sunset.getMinutes())"></h4>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                chance of {{ wxData.currently.precipType ? wxData.currently.precipType : "rain" }}
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                humidity
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                wind
+              </div>
+              <div>
+                <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}&nbsp;mph</h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                feels like
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                precipitation
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                pressure
+              </div>
+              <div>
+                <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                visibility
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                uv index
+              </div>
+              <div>
+                <h4>{{ wxData.currently.uvIndex }}</h4>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text-muted text-uppercase">
+                cloud cover
+              </div>
+              <div>
+                <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
+              </div>
+            </td>
+            <td>
+              <div class="text-muted text-uppercase">
+                time
+              </div>
+              <div>
+                <h4 [innerHTML]="formatTime(time.getHours(), time.getMinutes())"></h4>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br>
+
+    <div class="btn-group">
+      <button
+        class="btn btn-warning btn-sm"
+        type="button"
+        (click)="wxEntry();">
+        Change Location
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-warning dropdown-toggle dropdown-toggle-split"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false">
+        <span class="sr-only">
+          Toggle Dropdown
+        </span>
+      </button>
+      <div class="dropdown-menu">
+        <a
+          *ngFor="let option of locationDropdownOptions"
+          class="dropdown-item"
+          (click)="getWeather(option.coords);">
+          {{ option.text }}
+        </a>
+      </div>
+    </div>
+  </ng-template>
 </div>
