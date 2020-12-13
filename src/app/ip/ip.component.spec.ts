@@ -17,12 +17,14 @@ class MockActivatedRoute {
 
 class MockCacheService {
   get = () => ({
-    ip: '1.1.1.1',
-    hostname: 'host',
-    org: 'org',
-    city: 'city',
-    region: 'region',
-    country: 'country',
+    data: {
+      ip: '1.1.1.1',
+      hostname: 'host',
+      org: 'org',
+      city: 'city',
+      region: 'region',
+      country: 'country',
+    }
   })
   valueChanged = () => false;
   isExpired = () => false;

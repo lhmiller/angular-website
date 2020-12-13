@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { CacheService } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
 
@@ -26,16 +26,19 @@ describe('CacheService', () => {
     expect(service.get('str')).toBe('foo');
   });
 
-  it('should say an expired value is expired, and an non-expired value is not expired', () => {
+  it('should say an expired value is expired, and an non-expired value is not expired', fakeAsync(() => {
     const key = 'TEST_KEY';
     const value = 'foo';
 
     service.set(key, value);
     expect(service.isExpired(key)).toBeFalse();
 
-    // TODO simulate time passing so it expires
-    // expect(service.isExpired(key)).toBeTrue();
-  });
+    const CACHE_TTL_MS = 2 * 60 * 1000; // TTL is 2 mins
+    tick(CACHE_TTL_MS);
+    expect(service.isExpired(key)).toBeFalse();
+    tick(1000);
+    expect(service.isExpired(key)).toBeTrue();
+  }));
 
   it('should say a changed value is changed, and an unchanged value is not changed', () => {
     const key = 'TEST_KEY';
