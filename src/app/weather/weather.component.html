@@ -53,8 +53,8 @@
     </div>
 
     <h5>Next 48 Hours</h5>
-    <div class="table-responsive weather__table weather__table--faintBorder">
-      <table class="table weather__table">
+    <div class="table-sm weather__table weather__table--topBorder weather__table--48hours">
+      <table>
         <tbody>
           <tr>
             <td *ngFor="let element of wxData.hourly.data; index as i">
@@ -77,152 +77,142 @@
       </table>
     </div>
     
-    <br>
+    <table class="table-sm weather__table weather__table--topBorder">
+      <tbody>
+        <tr *ngFor="let element of wxData.daily.data; index as i">
+          <td class="h5 text-left">
+            {{ getDayNameFromEpoch(element.time) }}
+          </td>
+          <td class="text-center">
+            <img src="assets/icons/{{ element.icon }}.png" height="28" />
+          </td>
+          <td class="h5 text-right">
+            {{ round(element.precipProbability * 10) * 10 }}
+            <small>&#37;</small>
+          </td>
+          <td class="h5 text-right">
+            {{ round(element.temperatureHigh) }}&deg;
+          </td>
+          <td class="h5 text-right text-muted">
+            {{ round(element.temperatureLow) }}&deg;
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div>
-      <table class="table table-sm weather__table weather__table--borderless">
-        <tbody id="tbDaily">
-          <tr *ngFor="let element of wxData.daily.data; index as i">
-            <td class="h5">
-              {{ getDayNameFromEpoch(element.time) }}
-            </td>
-            <td>
-              <img src="assets/icons/{{ element.icon }}.png" height="28" />
-            </td>
-            <td class="h5">
-              {{ round(element.precipProbability * 10) * 10 }}
-              <small>&#37;</small>
-            </td>
-            <td class="h5">
-              {{ round(element.temperatureHigh) }}&deg;
-            </td>
-            <td class="h5 text-muted">
-              {{ round(element.temperatureLow) }}&deg;
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    
-    <br>
-
-    <div>
-      <table class="table table-sm weather__table weather__table--faintBorder">
-        <tbody id="tbCurrentlyData">
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                sunrise
-              </div>
-              <div>
-                <!-- TODO dont use inner HTML property -->
-                <h4 [innerHTML]="formatTime(sunrise.getHours(), sunrise.getMinutes())"></h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                sunset
-              </div>
-              <div>
-                <h4 [innerHTML]="formatTime(sunset.getHours(), sunset.getMinutes())"></h4>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                chance of {{ wxData.currently.precipType ? wxData.currently.precipType : "rain" }}
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                humidity
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                wind
-              </div>
-              <div>
-                <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}&nbsp;mph</h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                feels like
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                precipitation
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                pressure
-              </div>
-              <div>
-                <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                visibility
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                uv index
-              </div>
-              <div>
-                <h4>{{ wxData.currently.uvIndex }}</h4>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="text-muted text-uppercase">
-                cloud cover
-              </div>
-              <div>
-                <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
-              </div>
-            </td>
-            <td>
-              <div class="text-muted text-uppercase">
-                time
-              </div>
-              <div>
-                <h4 [innerHTML]="formatTime(time.getHours(), time.getMinutes())"></h4>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <br>
+    <table class="table-sm weather__table">
+      <tbody id="tbCurrentlyData">
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              sunrise
+            </div>
+            <div>
+              <!-- TODO dont use inner HTML property -->
+              <h4 [innerHTML]="formatTime(sunrise.getHours(), sunrise.getMinutes())"></h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              sunset
+            </div>
+            <div>
+              <h4 [innerHTML]="formatTime(sunset.getHours(), sunset.getMinutes())"></h4>
+            </div>
+          </td>
+        </tr>
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              chance of {{ wxData.currently.precipType ? wxData.currently.precipType : "rain" }}
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              humidity
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
+            </div>
+          </td>
+        </tr>
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              wind
+            </div>
+            <div>
+              <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}&nbsp;mph</h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              feels like
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
+            </div>
+          </td>
+        </tr>
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              precipitation
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              pressure
+            </div>
+            <div>
+              <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
+            </div>
+          </td>
+        </tr>
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              visibility
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              uv index
+            </div>
+            <div>
+              <h4>{{ wxData.currently.uvIndex }}</h4>
+            </div>
+          </td>
+        </tr>
+        <tr class="weather__table--topBorder">
+          <td>
+            <div class="text-muted text-uppercase">
+              cloud cover
+            </div>
+            <div>
+              <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
+            </div>
+          </td>
+          <td>
+            <div class="text-muted text-uppercase">
+              time
+            </div>
+            <div>
+              <h4 [innerHTML]="formatTime(time.getHours(), time.getMinutes())"></h4>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="btn-group">
       <button

@@ -5,6 +5,7 @@
   background-color: #060606;
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 8px;
   text-align: center;
 
   &__locationName {
@@ -13,7 +14,7 @@
 
   &__currentTemp {
     margin-left: 20px;
-    vertical-align: middle; // TODO can remove?
+    vertical-align: middle;
   }
 
   &__today {
@@ -22,22 +23,21 @@
   }
 
   &__table {
-    margin: 0 auto;
+    margin: 0 auto 1.2rem;
     max-width: 600px;
+    scrollbar-width: none;  /* Firefox */
+    width: 100%;
 
-    &--borderless td {
-      border: 0;
+    &::-webkit-scrollbar {
+      display: none;
     }
 
-    &--faintBorder td {
-      border-color: #282828;
+    &--topBorder {
+      border-top: 1px solid rgb(40,40,40);
+    }
+
+    &--48hours {
+      overflow-x: auto;
     }
   }
-}
-
-// TODO find a better way for this
-table td {
-  color: white;
-  text-align: center;
-  vertical-align: middle;
 }
