@@ -1,5 +1,42 @@
 @import 'src/scss/mixins';
 
+$backgroundColor: rgb(255,0,0);
+$backgroundGradient: linear-gradient(142deg, rgba(255,0,0,1) 0%, rgba(255,194,0,1) 100%);
+$textBackgroundColor: rgba(0,0,0,0.15);
+$textColor: rgba(0,0,0,1);
+
 .lucas {
   @include componentBase;
+  align-items: center;
+  background: $backgroundColor;
+  background: $backgroundGradient;
+  display: flex;
+  justify-content: center;
+
+  &__letters {
+    background: $textBackgroundColor;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 25px;
+  }
+
+  &__letter {
+    color: $textColor;
+    font-family: sans-serif;
+    font-size: 4.5rem;
+    font-weight: bold;
+  }
+  
+  &__notTriggered {
+    opacity: 0;
+  }
+  
+  &__triggered {
+    animation: fadeIn 1s ease;
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1 }
 }
