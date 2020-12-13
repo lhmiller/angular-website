@@ -29,9 +29,7 @@ interface IpData {
 export class IpComponent implements OnInit, OnDestroy {
   isOwnIp: boolean;
   ip: string;
-  hostname: string;
-  org: string;
-  location: string;
+  details: Array<{ key: string, value: string }>;
   private ngUnsubscribe = new Subject<void>();
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -73,10 +71,12 @@ export class IpComponent implements OnInit, OnDestroy {
 
   private setIpData = ({ ip, hostname, org, city, region, country }: IpData) => {
     this.ip = ip;
+    const details = [];
     if (hostname) {
-      this.hostname = hostname;
+      details.push({ name: 'hostname', value: hostname });
     }
-    this.org = org;
-    this.location = `${city} ${region} ${country}`;
+    details.push({ name: 'organization', value: org });
+    details.push({ name: 'location', value: `${city}, ${region}, ${country}` });
+    this.details = details;
   }
 }

@@ -29,23 +29,27 @@ class MockCacheServiceBase {
 
 class MockCacheServiceOwnIp extends MockCacheServiceBase {
   get = () => ({
-    ip: '1.2.3.4',
-    hostname: 'My hostname!',
-    org: 'My org!',
-    city: 'city',
-    region: 'region',
-    country: 'country',
+    data: {
+      ip: '1.2.3.4',
+      hostname: 'My hostname',
+      org: 'My org',
+      city: 'Somecity',
+      region: 'Someregion',
+      country: 'US&A',
+    }
   })
 }
 
 class MockCacheServiceNotOwnIp extends MockCacheServiceBase {
   get = () => ({
-    ip: '234.56.420.69',
-    hostname: 'Some hostname (not my IP)',
-    org: 'Some org',
-    city: 'city',
-    region: 'region',
-    country: 'country',
+    data: {
+      ip: '234.56.420.69',
+      hostname: 'Google',
+      org: 'Alphabet',
+      city: 'Mountain View',
+      region: 'The Bay',
+      country: 'US&A',
+    }
   })
 }
 

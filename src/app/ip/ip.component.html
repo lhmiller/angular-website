@@ -1,8 +1,15 @@
-<div class="text-center">
+<div
+  *ngIf="ip"
+  class="ip">
   <h1>{{ isOwnIp ? 'Your IP is ' : '' }}{{ ip }}</h1>
-  <h3 *ngIf="hostname">
-    {{ hostname }}
-  </h3>
-  <h3>{{ org }}</h3>
-  <h3>{{ location }}</h3>
+  <div
+    *ngFor="let detail of details"
+    class="ip__detail">
+    <h3 class="ip__detailValue">
+      {{ detail.value }}
+    </h3>
+    <h5 class="ip__detailName">
+      {{ detail.name }}
+    </h5>
+  </div>
 </div>
