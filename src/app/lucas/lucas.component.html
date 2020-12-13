@@ -1,5 +1,7 @@
 <div class="lucas">
-  <div class="lucas__letters">
+  <div
+    (click)="animateLetters()"
+    class="lucas__letters">
     <span
       *ngFor="let letter of mapLettersToHTML(); let i = index"
       [innerHTML]="letter"
