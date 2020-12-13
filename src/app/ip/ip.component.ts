@@ -51,7 +51,7 @@ export class IpComponent implements OnInit, OnDestroy {
 
   getIpData = (ipAddress: string) => {
     const valueChanged = (oldValue: CachedIpData) =>
-      ipAddress === oldValue.ipAddress;
+      !oldValue || (ipAddress === oldValue.ipAddress);
     if (this.cacheService.valueChanged(IP_DATA_KEY, valueChanged)
         || this.cacheService.isExpired(IP_DATA_KEY)) {
       // if new ip address, or cached value expired, save new value

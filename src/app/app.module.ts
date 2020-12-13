@@ -12,6 +12,8 @@ import { PartComponent } from './part/part.component';
 import { WeatherComponent } from './weather/weather.component';
 import { GeolocationService } from './weather/services/geolocation.service';
 import { IpService } from './ip/services/ip.service';
+import { CacheService } from './shared/cache.service';
+import { LocalStorageService } from './shared/local-storage.service';
 
 @NgModule({
   declarations: [
@@ -30,8 +32,10 @@ import { IpService } from './ip/services/ip.service';
     ReactiveFormsModule,
   ],
   providers: [
+    CacheService,
     GeolocationService,
     IpService,
+    LocalStorageService,
   ],
   bootstrap: [
     AppComponent,
