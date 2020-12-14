@@ -51,6 +51,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
   wxEntry = () => {
     const newLocationName = prompt('Please enter a place.', '');
+    if (!newLocationName) {
+      return;
+    }
+
     this.locationName = newLocationName;
     this.isLoading = true;
 
@@ -90,29 +94,48 @@ export class WeatherComponent implements OnInit, OnDestroy {
 
   getHourTitle = (element: any, i: number) => {
     const dateTime = epochToDateTime(element.time);
+    let isBold = false;
+    let showAmPm = true;
+    let hourFormatted = '';
     if (i === 0) {
-      return 'Now';
+      hourFormatted = 'Now';
+      showAmPm = false;
     } else if (dateTime.getHours() === 0) {
-      // for the first hour of a day, show the day name
-      return `<strong>${this.getDayName(dateTime.getDay()).substr(0, 3)}</strong>`;
-    } else {
-      return this.formatTime(dateTime.getHours());
+      // for the first hour of a day, show the day name (in bold)
+      isBold = true;
+      showAmPm = false;
+      hourFormatted = this.getDayName(dateTime.getDay()).substr(0, 3);
     }
+
+    const formatted = this.formatTime(dateTime.getHours());
+    Object.assign(formatted.$implicit, { isBold, showAmPm });
+    if (hourFormatted) {
+      Object.assign(formatted.$implicit, { formattedTime: hourFormatted });
+    }
+    return formatted;
   }
 
   formatTime = (hour: number, minute?: number) => {
-    let num: number;
+    let hourFormatted: number;
     let ampm: string;
-    const minuteFormatted = minute ? `:${minute}` : '';
+    const minuteFormatted = typeof minute === 'number'
+      ? ':' + `0${minute}`.substr(-2)
+      : '';
 
     if (hour < 12) {
-      num = hour === 0 ? 12 : hour;
+      hourFormatted = hour === 0 ? 12 : hour;
       ampm = 'AM';
     } else {
-      num = hour === 12 ? 12 : hour - 12;
+      hourFormatted = hour === 12 ? 12 : hour - 12;
       ampm = 'PM';
     }
-    return `${num}${minuteFormatted}<small>${ampm}</small>`;
+    // need this format for ngTemplate outlets
+    return {
+      $implicit: {
+        formattedTime: `${hourFormatted}${minuteFormatted}`,
+        ampm,
+      }
+    };
   }
 
   getDayNameFromEpoch = (epoch: number) => this.getDayName(epochToDateTime(epoch).getDay());

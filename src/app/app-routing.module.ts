@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { IpComponent } from './ip/ip.component';
-import { LucasComponent } from './lucas/lucas.component';
-import { PartComponent } from './part/part.component';
-import { WeatherComponent } from './weather/weather.component';
 
 const routes: Routes = [
   {
     path: 'ip',
-    children: [
-      { path: '', component: IpComponent },
-      { path: ':ip', component: IpComponent },
-    ]
+    loadChildren: () => import('./ip/ip.module').then(m => m.IpModule),
   },
-  { path: 'part', component: PartComponent },
-  { path: 'weather', component: WeatherComponent },
-  { path: '', component: LucasComponent },
+  {
+    path: 'part',
+    loadChildren: () => import('./part/part.module').then(m => m.PartModule),
+  },
+  {
+    path: 'weather',
+    loadChildren: () => import('./weather/weather.module').then(m => m.WeatherModule),
+  },
+  {
+    path: '',
+    loadChildren: () => import('./lucas/lucas.module').then(m => m.LucasModule),
+  },
 ];
 
 @NgModule({

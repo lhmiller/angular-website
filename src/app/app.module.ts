@@ -1,41 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { IpComponent } from './ip/ip.component';
-import { LucasComponent } from './lucas/lucas.component';
-import { PartComponent } from './part/part.component';
-import { WeatherComponent } from './weather/weather.component';
-import { GeolocationService } from './weather/services/geolocation.service';
-import { IpService } from './ip/services/ip.service';
-import { CacheService } from './shared/cache.service';
-import { LocalStorageService } from './shared/local-storage.service';
+import { ServiceModule } from './shared/service.module';
+import { IpModule } from './ip/ip.module';
+import { LucasModule } from './lucas/lucas.module';
+import { PartModule } from './part/part.module';
+import { WeatherModule } from './weather/weather.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IpComponent,
-    LucasComponent,
-    PartComponent,
-    WeatherComponent,
   ],
   imports: [
-    AppRoutingModule,
+    // 3rd party
     BrowserModule,
-    CommonModule,
-    HttpClientModule,
-    NgbModule,
-    ReactiveFormsModule,
-  ],
-  providers: [
-    CacheService,
-    GeolocationService,
-    IpService,
-    LocalStorageService,
+
+    // created in this package
+    AppRoutingModule,
+    IpModule,
+    LucasModule,
+    PartModule,
+    ServiceModule,
+    WeatherModule,
   ],
   bootstrap: [
     AppComponent,

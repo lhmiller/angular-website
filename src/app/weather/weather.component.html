@@ -7,49 +7,45 @@
 </head> -->
 
 <div class="weather">
-  <h3
+  <h2
     *ngIf="(isLoading || !wxData); else allWeather"
-    class="weather__locationName"
+    class="weather__current--locationName"
     (click)="wxEntry();">
     {{ getLoadingMessage() }}
-  </h3>
+  </h2>
 
   <ng-template #allWeather>
-    <h1>
-      <img
-        src="assets/icons/{{ wxData.currently.icon }}.png"
-        width="88" />
-      <span class="weather__currentTemp">
-        {{ round(wxData.currently.temperature) }}&deg;
-      </span>
-    </h1>
-    <h5>
-      {{ wxData.currently.summary }}
-    </h5>
-    <h3
-      class="weather__locationName"
-      (click)="wxEntry();">
-      {{ getLoadingMessage() }}
-    </h3>
+    <div class="weather__current">
+      <h5 class="weather__current--condition">
+        <img
+          src="assets/icons/{{ wxData.currently.icon }}.png"
+          width="88" />
+        <div>{{ wxData.currently.summary }}</div>
+      </h5>
 
-    <div class="weather__today d-flex">
-      <div class="p-2 align-self-center">
-        <h4>
-          {{ getDayNameFromEpoch(wxData.currently.time) }}
-          <!-- TODO size in css -->
-          <small><small><small>TODAY</small></small></small>
-        </h4>
-      </div>
-      <div class="ml-auto p-2 align-self-center">
-        <h4>
+      <h1 class="weather__current--temp">
+        {{ round(wxData.currently.temperature) }}&deg;
+      </h1>
+  
+      <h2
+        class="weather__current--locationName"
+        (click)="wxEntry();">
+        {{ getLoadingMessage() }}
+      </h2>
+  
+      <h4 class="weather__current--today">
+        {{ getDayNameFromEpoch(wxData.currently.time) }}
+        <small><small><small>TODAY</small></small></small>
+      </h4>
+  
+      <h4 class="weather__current--highLow">
+        <div>
           {{ round(wxData.daily.data[0].temperatureHigh) }}&deg;
-        </h4>
-      </div>
-      <div class="p-2 align-self-center">
-        <h4 class="text-muted">
+        </div>
+        <div class="text-muted">
           {{ round(wxData.daily.data[0].temperatureLow) }}&deg;
-        </h4>
-      </div>
+        </div>
+      </h4>
     </div>
 
     <h5>Next 48 Hours</h5>
@@ -58,19 +54,19 @@
         <tbody>
           <tr>
             <td *ngFor="let element of wxData.hourly.data; index as i">
-              <div> <!-- <big> -->
-                <div [innerHTML]="getHourTitle(element, i)"></div>
+              <div>
+                <div *ngTemplateOutlet="formattedHourTime; context: getHourTitle(element, i)"></div>
                 <div>
                   <img src="assets/icons/{{ element.icon }}.png" height="24" />
                 </div>
                 <div>{{ round(element.temperature) }}&deg;</div>
-                <div [ngStyle]="{ whiteSpace: 'nowrap' }">
+                <div class="weather__table__text--noWrap">
                   {{ round(element.precipProbability * 100) }}<small>%</small>
                 </div>
-                <div [ngStyle]="{ whiteSpace: 'nowrap' }">
+                <div class="weather__table__text--noWrap">
                   {{ round(element.windSpeed) }}<small>MPH</small>
                 </div>
-              </div> <!-- </big> -->
+              </div>
             </td>
           </tr>
         </tbody>
@@ -108,8 +104,9 @@
               sunrise
             </div>
             <div>
-              <!-- TODO dont use inner HTML property -->
-              <h4 [innerHTML]="formatTime(sunrise.getHours(), sunrise.getMinutes())"></h4>
+              <h4>
+                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunrise.getHours(), sunrise.getMinutes())"></ng-container>
+              </h4>
             </div>
           </td>
           <td>
@@ -117,7 +114,9 @@
               sunset
             </div>
             <div>
-              <h4 [innerHTML]="formatTime(sunset.getHours(), sunset.getMinutes())"></h4>
+              <h4>
+                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunset.getHours(), sunset.getMinutes())"></ng-container>
+              </h4>
             </div>
           </td>
         </tr>
@@ -207,7 +206,9 @@
               time
             </div>
             <div>
-              <h4 [innerHTML]="formatTime(time.getHours(), time.getMinutes())"></h4>
+              <h4>
+                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(time.getHours(), time.getMinutes())"></ng-container>
+              </h4>
             </div>
           </td>
         </tr>
@@ -242,3 +243,12 @@
     </div>
   </ng-template>
 </div>
+
+<ng-template #formattedHourTime let-hourTime>
+  <span [ngClass]="{ 'weather__table__text--bold': hourTime.isBold }">{{ hourTime.formattedTime }}</span>
+  <small *ngIf="hourTime.showAmPm">{{ hourTime.ampm }}</small>
+</ng-template>
+
+<ng-template #formattedTime let-time>
+  {{ time.formattedTime }}<small>{{ time.ampm }}</small>
+</ng-template>
