@@ -1,12 +1,13 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CacheService, cacheTTLToken } from '../shared/cache.service';
+import { CacheService } from '../shared/cache.service';
 import { TitleService } from '../shared/title.service';
 import { IpService } from './services/ip.service';
 
 const IP_DATA_KEY = 'IP_DATA';
+const IP_DATA_TTL_MS = 10 * 60 * 1000;
 
 interface CachedIpData {
   ipAddress: string;
@@ -26,8 +27,6 @@ interface IpData {
   selector: 'app-ip',
   templateUrl: './ip.component.html',
   styleUrls: ['./ip.component.scss'],
-  // 10 min TTL
-  providers: [{ provide: cacheTTLToken, useValue: 10 * 60 * 1000 }],
 })
 export class IpComponent implements OnInit, OnDestroy {
   isOwnIp: boolean;
@@ -66,7 +65,7 @@ export class IpComponent implements OnInit, OnDestroy {
             ipAddress,
             data: ipData,
           };
-          this.cacheService.set(IP_DATA_KEY, cacheEntry);
+          this.cacheService.set(IP_DATA_KEY, cacheEntry, IP_DATA_TTL_MS);
         });
     } else {
       // else (same ip address & non expired) use stored value

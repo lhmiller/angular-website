@@ -1,32 +1,25 @@
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-
+import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
-
-export const cacheTTLToken = new InjectionToken<number>('cacheTTLMs');
-export const DEFAULT_CACHE_TTL_MS_PROVIDER = {
-  provide: cacheTTLToken,
-  useValue: 2 * 60 * 1000,
-};
 
 @Injectable()
 export class CacheService<T> {
-  constructor(private storageService: LocalStorageService,
-              @Inject(cacheTTLToken) private cacheTTLMs) {}
+  constructor(private storageService: LocalStorageService) {}
 
   get = (key: string): T => {
     return this.storageService.get(key);
   }
 
-  set = (key: string, value: T) => {
-    const { timestampKey, now } = this.getCommonVars(key);
+  set = (key: string, value: T, ttlMs: number) => {
+    const { expirationKey, now } = this.getCommonVars(key);
     this.storageService.set(key, value);
-    this.storageService.set(timestampKey, now);
+    const expiration = now + ttlMs;
+    this.storageService.set(expirationKey, expiration);
   }
 
   remove = (key: string) => {
-    const { timestampKey } = this.getCommonVars(key);
+    const { expirationKey } = this.getCommonVars(key);
     this.storageService.remove(key);
-    this.storageService.remove(timestampKey);
+    this.storageService.remove(expirationKey);
   }
 
   clear = () => {
@@ -34,12 +27,12 @@ export class CacheService<T> {
   }
 
   isExpired = (key: string) => {
-    const { timestampKey, now } = this.getCommonVars(key);
-    const timestampValue = this.storageService.get(timestampKey);
-    const timestamp = typeof timestampValue === 'number'
-      ? timestampValue
+    const { expirationKey, now } = this.getCommonVars(key);
+    const expirationValue = this.storageService.get(expirationKey);
+    const expiration = typeof expirationValue === 'number'
+      ? expirationValue
       : -Number.MIN_VALUE;
-    return (now - timestamp) > this.cacheTTLMs;
+    return now > expiration;
   }
 
   valueChanged = (key: string, comparatorFn: (oldValue: T) => boolean) =>
@@ -48,9 +41,7 @@ export class CacheService<T> {
   length = () => this.storageService.length();
 
   private getCommonVars = (key: string) => ({
-    timestampKey: this.getTimestampKey(key),
+    expirationKey: `${key}-expiration`,
     now: new Date().valueOf(),
   })
-
-  private getTimestampKey = (key: string) => `${key}-timestamp`;
 }

@@ -3,12 +3,20 @@ import { of } from 'rxjs';
 import { WeatherComponent } from './weather.component';
 import { GeolocationService } from './services/geolocation.service';
 import { TitleService } from '../shared/title.service';
+import { CacheService } from '../shared/cache.service';
 
 class MockGeolocationService {
   getAddress = () => of({});
   getWeather = () => of({});
   getLocationName = () => of({});
   getCurrentPosition = () => of('');
+}
+
+class MockCacheService {
+  get = (s) => s === 'LOCATION_DATA' ? { coords: '' } : null;
+  set = () => {};
+  valueChanged = () => false;
+  isExpired = () => false;
 }
 
 class MockTitleService {
@@ -24,6 +32,7 @@ describe('WeatherComponent', () => {
       declarations: [WeatherComponent],
       providers: [
         { provide: GeolocationService, useClass: MockGeolocationService },
+        { provide: CacheService, useClass: MockCacheService },
         { provide: TitleService, useClass: MockTitleService },
       ],
     })

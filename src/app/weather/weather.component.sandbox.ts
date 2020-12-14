@@ -1,10 +1,10 @@
 import { sandboxOf } from 'angular-playground';
 import { of } from 'rxjs';
-import { epochToDateTime } from './weather-utils';
 import { WeatherComponent } from './weather.component';
 import { GeolocationService } from './services/geolocation.service';
 import weatherData from './playground/weather-response';
 import { TitleService } from '../shared/title.service';
+import { CacheService } from '../shared/cache.service';
 
 class MockGeolocationService {
   getAddress = () => {
@@ -15,16 +15,18 @@ class MockGeolocationService {
   }
 
   getWeather = () => {
-    const data = weatherData;
-    const sunrise = epochToDateTime(data.daily.data[0].sunriseTime);
-    const sunset = epochToDateTime(data.daily.data[0].sunsetTime);
-    const time = epochToDateTime(data.currently.time);
-    return of({ data, sunrise, sunset, time });
+    return of(weatherData);
   }
 
   getCurrentPosition = () => of('35.2555507,-120.6849783');
 
   getLocationName = () => of('San Luis Obispo');
+}
+
+class MockCacheService {
+  get = () => {};
+  valueChanged = () => false;
+  isExpired = () => false;
 }
 
 class MockTitleService {
@@ -34,6 +36,7 @@ class MockTitleService {
 export default sandboxOf(WeatherComponent, {
   providers: [
     { provide: GeolocationService, useClass: MockGeolocationService },
+    { provide: CacheService, useClass: MockCacheService },
     { provide: TitleService, useClass: MockTitleService },
   ],
 })

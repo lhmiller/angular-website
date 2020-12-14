@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { epochToDateTime, WxData } from '../weather-utils';
+import { GoogleMapsData, WxData } from '../weather-utils';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -12,11 +12,8 @@ export class GeolocationService {
   getWeather = (coordinates: string) => {
     return this.http.get(environment.weatherBaseUrl + coordinates).pipe(
       map((data: WxData) => {
-        const sunrise = epochToDateTime(data.daily.data[0].sunriseTime);
-        const sunset = epochToDateTime(data.daily.data[0].sunsetTime);
-        const time = epochToDateTime(data.currently.time);
         console.log('WEATHER', data);
-        return { data, sunrise, sunset, time };
+        return data;
       })
     );
   }
@@ -25,7 +22,7 @@ export class GeolocationService {
     // tslint:disable-next-line:max-line-length
     const loc = `https://maps.googleapis.com/maps/api/geocode/json?address=${locationName}&key=AIzaSyD14VN2PWMa-wzExV0g6dn1YBCnqecO_uw`;
     return this.http.get(loc).pipe(
-      map((data: any) => {
+      map((data: GoogleMapsData) => {
         const lat = data.results[0].geometry.location.lat;
         const long = data.results[0].geometry.location.lng;
         const address = data.results[0].formatted_address;
@@ -40,7 +37,7 @@ export class GeolocationService {
     // tslint:disable-next-line:max-line-length
     const loc = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates}&result_type=postal_code&key=AIzaSyD14VN2PWMa-wzExV0g6dn1YBCnqecO_uw`;
     return this.http.get(loc).pipe(
-      map((data: WxData) => data.results[0].address_components[1].short_name)
+      map((data: GoogleMapsData) => data.results[0].address_components[1].short_name)
     );
   }
 
@@ -51,7 +48,7 @@ export class GeolocationService {
       return new Observable(observer => {
         navigator.geolocation.getCurrentPosition(
           // success
-          (pos) => {
+          (pos: Position) => {
             const latLong = `${pos.coords.latitude},${pos.coords.longitude}`;
             observer.next(latLong);
             observer.complete();
