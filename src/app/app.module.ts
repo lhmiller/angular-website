@@ -7,10 +7,12 @@ import { IpModule } from './ip/ip.module';
 import { LucasModule } from './lucas/lucas.module';
 import { PartModule } from './part/part.module';
 import { WeatherModule } from './weather/weather.module';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    FooterComponent,
   ],
   imports: [
     // 3rd party

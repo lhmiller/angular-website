@@ -1,6 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TitleService } from '../shared/title.service';
 import { PartComponent } from './part.component';
+
+class MockTitleService {
+  setTitle = () => {};
+}
 
 describe('PartComponent', () => {
   let component: PartComponent;
@@ -10,6 +15,7 @@ describe('PartComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [PartComponent],
       imports: [ReactiveFormsModule],
+      providers: [{ provide: TitleService, useClass: MockTitleService }],
     })
     .compileComponents();
   });

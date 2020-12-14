@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { CacheService } from '../shared/cache.service';
+import { TitleService } from '../shared/title.service';
 import { IpComponent } from './ip.component';
 import { IpService } from './services/ip.service';
 
@@ -30,6 +31,10 @@ class MockCacheService {
   isExpired = () => false;
 }
 
+class MockTitleService {
+  setTitle = () => {};
+}
+
 describe('IpComponent', () => {
   let component: IpComponent;
   let fixture: ComponentFixture<IpComponent>;
@@ -41,7 +46,8 @@ describe('IpComponent', () => {
         { provide: IpService, useClass: MockIpService },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: CacheService, useClass: MockCacheService },
-      ]
+        { provide: TitleService, useClass: MockTitleService },
+      ],
     })
     .compileComponents();
   });

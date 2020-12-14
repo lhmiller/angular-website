@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TitleService } from '../shared/title.service';
 import { LucasComponent } from './lucas.component';
+
+class MockTitleService {
+  setTitle = () => {};
+}
 
 describe('LucasComponent', () => {
   let component: LucasComponent;
@@ -7,7 +12,8 @@ describe('LucasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LucasComponent]
+      declarations: [LucasComponent],
+      providers: [{ provide: TitleService, useClass: MockTitleService }],
     })
     .compileComponents();
   });

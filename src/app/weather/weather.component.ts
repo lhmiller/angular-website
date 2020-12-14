@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { epochToDateTime, WxData } from './weather-utils';
 import { GeolocationService } from './services/geolocation.service';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'app-weather',
@@ -37,11 +38,13 @@ export class WeatherComponent implements OnInit, OnDestroy {
   round = Math.round;
   private ngUnsubscribe = new Subject<void>();
 
-  constructor(private geolocationService: GeolocationService) {}
+  constructor(private geolocationService: GeolocationService,
+              private titleService: TitleService) {}
 
   ngOnInit() {
     // TODO use cache service for weather data
     this.getLocation();
+    this.titleService.setTitle('Weather');
   }
 
   ngOnDestroy() {

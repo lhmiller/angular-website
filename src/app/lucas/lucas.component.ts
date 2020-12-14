@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TitleService } from '../shared/title.service';
 
 const LOAD_TIME_MS = 800;
 const START_OFFSET_MS = 200;
@@ -13,8 +14,11 @@ export class LucasComponent implements OnInit, OnDestroy {
   count = 0;
   private timeouts: number[] = [];
 
+  constructor(private titleService: TitleService) {}
+
   ngOnInit() {
     this.animateLetters();
+    this.titleService.setTitle('Lucas Miller');
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { CacheService } from './cache.service';
+import { CacheService, DEFAULT_CACHE_TTL_MS_PROVIDER } from './cache.service';
 import { LocalStorageService } from './local-storage.service';
 
 describe('CacheService', () => {
@@ -7,7 +7,11 @@ describe('CacheService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CacheService, LocalStorageService]
+      providers: [
+        CacheService,
+        LocalStorageService,
+        DEFAULT_CACHE_TTL_MS_PROVIDER,
+      ]
     });
     service = TestBed.inject(CacheService);
     service.clear();

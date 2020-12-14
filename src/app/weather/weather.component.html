@@ -1,11 +1,3 @@
-<!-- TODO move to index.html if keeping -->
-<!-- <head>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <title>Weather</title>
-</head> -->
-
 <div class="weather">
   <h2
     *ngIf="(isLoading || !wxData); else allWeather"
@@ -55,11 +47,16 @@
           <tr>
             <td *ngFor="let element of wxData.hourly.data; index as i">
               <div>
-                <div *ngTemplateOutlet="formattedHourTime; context: getHourTitle(element, i)"></div>
+                <div
+                  *ngTemplateOutlet="formattedHourTime; context: getHourTitle(element, i)"
+                  class="weather__table__text--noWrap">
+                </div>
                 <div>
                   <img src="assets/icons/{{ element.icon }}.png" height="24" />
                 </div>
-                <div>{{ round(element.temperature) }}&deg;</div>
+                <div class="weather__table__text--noWrap">
+                  {{ round(element.temperature) }}&deg;
+                </div>
                 <div class="weather__table__text--noWrap">
                   {{ round(element.precipProbability * 100) }}<small>%</small>
                 </div>
@@ -82,14 +79,13 @@
           <td class="text-center">
             <img src="assets/icons/{{ element.icon }}.png" height="28" />
           </td>
-          <td class="h5 text-right">
-            {{ round(element.precipProbability * 10) * 10 }}
-            <small>&#37;</small>
+          <td class="h5 text-right weather__table__text--noWrap">
+            {{ round(element.precipProbability * 10) * 10 }}<small>&#37;</small>
           </td>
-          <td class="h5 text-right">
+          <td class="h5 text-right weather__table__text--noWrap">
             {{ round(element.temperatureHigh) }}&deg;
           </td>
-          <td class="h5 text-right text-muted">
+          <td class="h5 text-right text-muted weather__table__text--noWrap">
             {{ round(element.temperatureLow) }}&deg;
           </td>
         </tr>
@@ -103,21 +99,17 @@
             <div class="text-muted text-uppercase">
               sunrise
             </div>
-            <div>
-              <h4>
-                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunrise.getHours(), sunrise.getMinutes())"></ng-container>
-              </h4>
-            </div>
+            <h4>
+              <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunrise.getHours(), sunrise.getMinutes())"></ng-container>
+            </h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               sunset
             </div>
-            <div>
-              <h4>
-                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunset.getHours(), sunset.getMinutes())"></ng-container>
-              </h4>
-            </div>
+            <h4>
+              <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(sunset.getHours(), sunset.getMinutes())"></ng-container>
+            </h4>
           </td>
         </tr>
         <tr class="weather__table--topBorder">
@@ -125,17 +117,13 @@
             <div class="text-muted text-uppercase">
               chance of {{ wxData.currently.precipType ? wxData.currently.precipType : "rain" }}
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
-            </div>
+            <h4>{{ round(wxData.currently.precipProbability * 100) }}<small>&#37;</small></h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               humidity
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
-            </div>
+            <h4>{{ round(wxData.currently.humidity * 100) }}<small>&#37;</small></h4>
           </td>
         </tr>
         <tr class="weather__table--topBorder">
@@ -143,17 +131,13 @@
             <div class="text-muted text-uppercase">
               wind
             </div>
-            <div>
-              <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}&nbsp;mph</h4>
-            </div>
+            <h4><small>{{ this.windDirection(wxData.currently.windBearing) }}</small>&nbsp;{{ round(wxData.currently.windSpeed) }}mph</h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               feels like
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
-            </div>
+            <h4>{{ round(wxData.currently.apparentTemperature) }}&deg;</h4>
           </td>
         </tr>
         <tr class="weather__table--topBorder">
@@ -161,17 +145,13 @@
             <div class="text-muted text-uppercase">
               precipitation
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
-            </div>
+            <h4>{{ round(wxData.currently.precipIntensity) }}&nbsp;in</h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               pressure
             </div>
-            <div>
-              <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
-            </div>
+            <h4>{{ round((wxData.currently.pressure / 33.863886666667) * 100) / 100 }}&nbsp;inHg</h4>
           </td>
         </tr>
         <tr class="weather__table--topBorder">
@@ -179,17 +159,13 @@
             <div class="text-muted text-uppercase">
               visibility
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
-            </div>
+            <h4>{{ round(wxData.currently.visibility) }}&nbsp;mi</h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               uv index
             </div>
-            <div>
-              <h4>{{ wxData.currently.uvIndex }}</h4>
-            </div>
+            <h4>{{ wxData.currently.uvIndex }}</h4>
           </td>
         </tr>
         <tr class="weather__table--topBorder">
@@ -197,25 +173,22 @@
             <div class="text-muted text-uppercase">
               cloud cover
             </div>
-            <div>
-              <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
-            </div>
+            <h4>{{ round(wxData.currently.cloudCover) }}<small>&#37;</small></h4>
           </td>
           <td>
             <div class="text-muted text-uppercase">
               time
             </div>
-            <div>
-              <h4>
-                <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(time.getHours(), time.getMinutes())"></ng-container>
-              </h4>
-            </div>
+            <h4>
+              <ng-container *ngTemplateOutlet="formattedTime; context: formatTime(time.getHours(), time.getMinutes())"></ng-container>
+            </h4>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="btn-group">
+      <!-- TODO make change location button work -->
       <button
         class="btn btn-warning btn-sm"
         type="button"

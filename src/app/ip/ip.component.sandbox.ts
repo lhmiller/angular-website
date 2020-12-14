@@ -1,6 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { sandboxOf } from 'angular-playground';
 import { CacheService } from '../shared/cache.service';
+import { TitleService } from '../shared/title.service';
 import { IpComponent } from './ip.component';
 import { IpService } from './services/ip.service';
 
@@ -53,8 +54,15 @@ class MockCacheServiceNotOwnIp extends MockCacheServiceBase {
   })
 }
 
+class MockTitleService {
+  setTitle = () => {};
+}
+
 export default sandboxOf(IpComponent, {
-  providers: [{ provide: IpService, useClass: MockIpService }]
+  providers: [
+    { provide: IpService, useClass: MockIpService },
+    { provide: TitleService, useClass: MockTitleService },
+  ],
 })
   .add('own IP', {
     template: `<app-ip></app-ip>`,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl } from '@angular/forms';
+import { TitleService } from '../shared/title.service';
 import { groups, sites } from './part-data';
 
 @Component({
@@ -13,11 +14,14 @@ export class PartComponent implements OnInit {
   group: string;
   sites = sites;
 
+  constructor(private titleService: TitleService) {}
+
   ngOnInit() {
     this.partNum = new FormControl('', this.partNumberValidator);
     this.partNum.valueChanges.subscribe(() => {
       this.makeLinks();
     });
+    this.titleService.setTitle('BMW Part Lookup');
   }
 
   makeLinks = () => {

@@ -4,6 +4,7 @@ import { epochToDateTime } from './weather-utils';
 import { WeatherComponent } from './weather.component';
 import { GeolocationService } from './services/geolocation.service';
 import weatherData from './playground/weather-response';
+import { TitleService } from '../shared/title.service';
 
 class MockGeolocationService {
   getAddress = () => {
@@ -26,8 +27,15 @@ class MockGeolocationService {
   getLocationName = () => of('San Luis Obispo');
 }
 
+class MockTitleService {
+  setTitle = () => {};
+}
+
 export default sandboxOf(WeatherComponent, {
-  providers: [{ provide: GeolocationService, useClass: MockGeolocationService }]
+  providers: [
+    { provide: GeolocationService, useClass: MockGeolocationService },
+    { provide: TitleService, useClass: MockTitleService },
+  ],
 })
   .add('default', {
     template: `<app-weather></app-weather>`

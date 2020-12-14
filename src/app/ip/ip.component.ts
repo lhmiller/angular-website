@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CacheService, cacheTTLToken } from '../shared/cache.service';
+import { TitleService } from '../shared/title.service';
 import { IpService } from './services/ip.service';
 
 const IP_DATA_KEY = 'IP_DATA';
@@ -25,8 +26,8 @@ interface IpData {
   selector: 'app-ip',
   templateUrl: './ip.component.html',
   styleUrls: ['./ip.component.scss'],
-  // TODO figure out TTL
-  providers: [{ provide: cacheTTLToken, useValue: 2 * 60 * 1000 }],
+  // 10 min TTL
+  providers: [{ provide: cacheTTLToken, useValue: 10 * 60 * 1000 }],
 })
 export class IpComponent implements OnInit, OnDestroy {
   isOwnIp: boolean;
@@ -36,12 +37,14 @@ export class IpComponent implements OnInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute,
               private ipService: IpService,
-              private cacheService: CacheService<CachedIpData>) {}
+              private cacheService: CacheService<CachedIpData>,
+              private titleService: TitleService) {}
 
   ngOnInit() {
     const ip = this.activatedRoute.snapshot.paramMap.get('ip');
     this.isOwnIp = !ip;
     this.getIpData(ip);
+    this.titleService.setTitle('IP Lookup');
   }
 
   ngOnDestroy() {
