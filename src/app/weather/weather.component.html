@@ -1,43 +1,51 @@
-<div class="weather">
+<div
+  [ngClass]="{ 'weather--isLoading': isLoading }"
+  class="weather">
   <div class="weather__current">
     <h5 class="weather__current--condition">
-      <img
-        src="assets/icons/{{ wxData?.currently.icon }}.png"
-        width="88" />
-      <div>{{ wxData?.currently.summary }}</div>
+      <div class="weather__current--outside">
+        <img
+          src="assets/icons/{{ wxData?.currently.icon }}.png"
+          width="88" />
+        <div>{{ wxData?.currently.summary }}</div>
+      </div>
+      <div class="weather__current--temps">
+        <div class="weather__current--temp">
+          {{ round(wxData?.currently.temperature) }}&deg;
+        </div>
+        <div class="weather__current--highLow">
+          <div>
+            {{ round(wxData?.daily.data[0].temperatureHigh) }}&deg;
+          </div>
+          <div class="text-muted">
+            {{ round(wxData?.daily.data[0].temperatureLow) }}&deg;
+          </div>
+        </div>
+      </div>
     </h5>
-
-    <h1 class="weather__current--temp">
-      {{ round(wxData?.currently.temperature) }}&deg;
-    </h1>
 
     <h2
       class="weather__current--locationName"
       (click)="wxEntry()">
-      {{ getLoadingMessage() }}
+      {{ getLocationName() }}
     </h2>
 
     <h4 class="weather__current--today">
       {{ getDayNameFromEpoch(wxData?.currently.time) }}
       <small><small><small>TODAY</small></small></small>
     </h4>
-
-    <h4 class="weather__current--highLow">
-      <div>
-        {{ round(wxData?.daily.data[0].temperatureHigh) }}&deg;
-      </div>
-      <div class="text-muted">
-        {{ round(wxData?.daily.data[0].temperatureLow) }}&deg;
-      </div>
-    </h4>
   </div>
 
-  <h5>Next 48 Hours</h5>
-  <div class="table-sm weather__table weather__table--topBorder weather__table--48hours">
+  <h4 class="weather__48hoursTitle">
+    Next 48 Hours
+  </h4>
+  <div class="weather__table weather__table--topBorder weather__table--48hours">
     <table>
       <tbody>
         <tr>
-          <td *ngFor="let element of wxData?.hourly.data; index as i">
+          <td
+            *ngFor="let element of wxData?.hourly.data; index as i"
+            class="weather__table__td">
             <div>
               <div
                 *ngTemplateOutlet="formattedHourTime; context: getHourTitle(element, i)"
@@ -180,30 +188,35 @@
   </table>
 
   <div class="btn-group">
-    <!-- TODO make change location button work -->
     <button
       class="btn btn-warning btn-sm"
       type="button"
       (click)="wxEntry()">
       Change Location
     </button>
-    <button
-      type="button"
-      class="btn btn-sm btn-warning dropdown-toggle dropdown-toggle-split"
-      data-toggle="dropdown"
-      aria-haspopup="true"
-      aria-expanded="false">
-      <span class="sr-only">
-        Toggle Dropdown
-      </span>
-    </button>
-    <div class="dropdown-menu">
-      <a
-        *ngFor="let option of locationDropdownOptions"
-        class="dropdown-item"
-        (click)="checkForNewWeatherData(option.coords, option.text, true)">
-        {{ option.text }}
-      </a>
+    <div
+      ngbDropdown
+      placement="top-right"
+      class="d-inline-block">
+      <button
+        ngbDropdownToggle
+        class="btn btn-warning weather__changeLocationDropdownTrigger">
+      </button>
+      <div
+        ngbDropdownMenu
+        aria-labelledby="dropdownBasic2">
+        <button
+          ngbDropdownItem
+          (click)="checkForNewLocation(true)">
+          Use Geolocation
+        </button>
+        <button
+          *ngFor="let option of locationDropdownOptions"
+          ngbDropdownItem
+          (click)="checkForNewWeatherData(option.coords, option.text, true)">
+          {{ option.text }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

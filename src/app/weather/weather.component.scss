@@ -8,53 +8,55 @@
   padding: 25px 8px;
   text-align: center;
 
+  &--isLoading {
+    & .weather__table,
+    & .weather__current--condition,
+    & .weather__current--today,
+    & .weather__48hoursTitle,
+    & .weather__changeLocationDropdown {
+      opacity: 0.5;
+    }
+  }
+
   &__current {
     // https://css-tricks.com/snippets/css/complete-guide-grid
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: auto auto auto;
     margin: 0 auto 1rem;
-    max-width: 420px;
+    max-width: 380px;
 
     &--condition {
-      grid-area: 1 / 1 / 2 / 2;
-      text-align: center;
-    }
-
-    &--temp {
-      align-items: center;
       display: flex;
-      font-size: 4rem;
-      grid-area: 1 / 2 / 2 / 3;
+      grid-area: 1 / 1 / 2 / 3;
       justify-content: center;
     }
 
-    &--locationName {
-      grid-area: 2 / 1 / 3 / 3;
-      text-align: center;
+    &--outside {
+      margin-right: 50px;
+      font-size: 1.5rem;
     }
 
-    &--today {
-      grid-area: 3 / 1 / 4 / 2;
-      padding-left: 10px;
-      text-align: left;
+    &--temp {
+      font-size: 4rem;
     }
 
     &--highLow {
       display: flex;
-      grid-area: 3 / 2 / 4 / 3;
-      justify-content: flex-end;
-      padding-right: 10px;
-
-      & > *:first-child {
-        margin-right: 20px;
-      }
+      font-size: 1.5rem;
+      justify-content: space-between;
+      padding: 0 3px;
     }
-  }
 
-  &__today {
-    margin: 0 auto;
-    max-width: 400px;
+    &--locationName {
+      font-size: 2.5rem;
+      grid-area: 2 / 1 / 3 / 3;
+      margin-bottom: 1rem;
+    }
+
+    &--today {
+      grid-area: 3 / 1 / 4 / 3;
+    }
   }
 
   &__table {
@@ -73,6 +75,10 @@
 
     &--48hours {
       overflow-x: auto;
+
+      & .weather__table__td {
+        padding: 0.5rem;
+      }
     }
 
     &__text {
@@ -84,5 +90,10 @@
         white-space: nowrap;
       }
     }
+  }
+
+  &__changeLocationDropdownTrigger {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
   }
 }

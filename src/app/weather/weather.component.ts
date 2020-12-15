@@ -24,10 +24,6 @@ interface CachedLocationData {
 export class WeatherComponent implements OnInit, OnDestroy {
   locationDropdownOptions = [
     {
-      text: 'Use Geolocation',
-      coords: null,
-    },
-    {
       text: 'Lima',
       coords: '35.2555507,-120.6849783',
     },
@@ -65,20 +61,25 @@ export class WeatherComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  checkForNewLocation = () => {
+  checkForNewLocation = (forceUpdate = false) => {
+    if (forceUpdate) {
+      this.locationName = '';
+    }
+
     this.geolocationService.getCurrentPosition()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((coords: string) => {
         const valueChanged = (oldValue: CachedLocationData) =>
           !oldValue || !this.fuzzyMatchCoords(coords, oldValue.coords);
         if (this.cacheService.valueChanged(LOCATION_DATA_KEY, valueChanged)
-            || this.cacheService.isExpired(LOCATION_DATA_KEY)) {
-          // new location - save coords then get weather
+            || this.cacheService.isExpired(LOCATION_DATA_KEY)
+            || forceUpdate) {
+          // new location - save coords & get weather
+          this.checkForNewWeatherData(coords, this.locationName, true);
           const cacheEntry: CachedLocationData = {
             coords,
             name: this.locationName,
           };
-          this.checkForNewWeatherData(coords, this.locationName, true);
           this.cacheService.set(LOCATION_DATA_KEY, cacheEntry, LOCATION_DATA_TTL_MS);
           this.isLoading = true;
           // update location name since coords have changed
@@ -92,7 +93,12 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   checkForNewWeatherData = (coords: string, locationName: string, forceUpdate = false) => {
-    this.setLocationName(locationName);
+    if (!coords) {
+      this.checkForNewLocation();
+      return;
+    } else {
+      this.setLocationName(locationName);
+    }
 
     if (this.cacheService.isExpired(WEATHER_DATA_KEY) || forceUpdate) {
       this.isLoading = true;
@@ -218,10 +224,12 @@ export class WeatherComponent implements OnInit, OnDestroy {
     }
   }
 
-  getLoadingMessage = () => {
+  getLocationName = () => {
     const { locationName, isLoading } = this;
-    if (isLoading || !locationName) {
-      return `Loading${locationName ? (' ' + locationName) : '' }...`;
+    if (!locationName) {
+      return 'Getting Location...';
+    } else if (isLoading) {
+      return `Loading ${locationName}...`;
     } else {
       return locationName;
     }
