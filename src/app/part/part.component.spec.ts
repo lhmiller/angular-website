@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TitleService } from '../shared/title.service';
@@ -13,6 +14,7 @@ describe('PartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
       declarations: [PartComponent],
       imports: [ReactiveFormsModule],
       providers: [{ provide: TitleService, useClass: MockTitleService }],

@@ -4,6 +4,11 @@ import { TitleService } from '../shared/title.service';
 const LOAD_TIME_MS = 800;
 const START_OFFSET_MS = 200;
 
+// TODO idea
+// use a canvas as the background, draw a starry night
+// only update on resize
+// possible update every few seconds (1 star leaves, 1 added...?)
+
 @Component({
   selector: 'app-lucas',
   templateUrl: './lucas.component.html',

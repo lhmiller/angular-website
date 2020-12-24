@@ -1,5 +1,5 @@
 <div class="part">
-  <div class="part__input input-group input-group-lg">
+  <div class="part__input input-group input-group-md">
     <input
       [formControl]="partNum"
       [ngClass]="{
@@ -20,14 +20,17 @@
         {{ group }}
       </h4>
     </div>
-    <button
-      *ngFor="let site of sites"
-      type="button"
-      class="part__button btn btn-lg btn-block"
-      [ngClass]="site.buttonClass"
-      (click)="searchSite(site.searchUrl)"
-      [disabled]="!partNum.valid">
-      {{ site.name }}
-    </button>
+    <div class="part__buttonGroup">
+      <button
+        *ngFor="let site of sites"
+        type="button"
+        class="part__button btn btn-md btn-block"
+        [ngClass]="site.buttonClass"
+        (click)="searchSite(site.searchUrl)"
+        [disabled]="!partNum.valid">
+        {{ site.name }}
+      </button>
+    </div>
   </ng-template>
+  <app-footer class="part__footer"></app-footer>
 </div>

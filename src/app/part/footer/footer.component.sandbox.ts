@@ -1,5 +1,5 @@
 import { sandboxOf } from 'angular-playground';
-import { TitleService } from '../shared/title.service';
+import { TitleService } from '../../shared/title.service';
 import { FooterComponent } from './footer.component';
 
 class MockTitleService {

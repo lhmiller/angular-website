@@ -6,8 +6,9 @@ import { CacheService } from '../shared/cache.service';
 import { TitleService } from '../shared/title.service';
 import { IpService } from './services/ip.service';
 
+// TODO adjust to Lucas' liking
 const IP_DATA_KEY = 'IP_DATA';
-const IP_DATA_TTL_MS = 10 * 60 * 1000;
+const IP_DATA_TTL_MS = 10 * 60 * 1000; // 10 mins
 
 interface CachedIpData {
   ipAddress: string;
