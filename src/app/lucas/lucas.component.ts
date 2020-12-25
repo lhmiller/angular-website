@@ -16,23 +16,23 @@ export class LucasComponent implements OnInit, OnDestroy {
     {
       name: 'Resume',
       // TODO add pdf viewer
-      link: 'pdfjs/web/viewer.html?file=/assets/doc/Resume.pdf'
+      link: 'pdfjs/web/viewer.html?file=/assets/doc/Resume.pdf',
     },
     {
       name: 'LinkedIn',
-      link: 'https://www.linkedin.com/in/lucasmiller1'
+      link: 'https://www.linkedin.com/in/lucasmiller1',
     },
     {
       name: 'Github',
-      link: 'https://www.github.com/lhmiller'
+      link: 'https://www.github.com/lhmiller',
     },
     {
       name: 'Portfolium',
-      link: 'https://portfolium.com/lucasmiller1'
+      link: 'https://portfolium.com/lucasmiller1',
     },
     {
       name: 'Email',
-      link: 'mailto:lhmiller@calpoly.edu'
+      link: 'mailto:lhmiller@calpoly.edu',
     },
   ];
   private lettersCount = 0;

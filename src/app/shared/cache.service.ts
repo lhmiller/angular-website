@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from './local-storage.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CacheService<T> {
   constructor(private storageService: LocalStorageService) {}
 

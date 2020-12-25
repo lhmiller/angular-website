@@ -24,8 +24,7 @@ class MockActivatedRouteNotOwnIp {
 }
 
 class MockCacheServiceBase {
-  valueChanged = () => false;
-  isExpired = () => false;
+  valueChangedOrExpired = () => false;
 }
 
 class MockCacheServiceOwnIp extends MockCacheServiceBase {

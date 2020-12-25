@@ -15,5 +15,9 @@ import { PartComponent } from './part.component';
     PartComponent,
     FooterComponent,
   ],
+  exports: [
+    PartComponent,
+    FooterComponent,
+  ],
 })
 export class PartModule {}

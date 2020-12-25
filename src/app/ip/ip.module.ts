@@ -5,11 +5,12 @@ import { IpComponent } from './ip.component';
 import { IpService } from './services/ip.service';
 
 @NgModule({
-  declarations: [IpComponent],
   imports: [
     CommonModule,
     IpRoutingModule,
   ],
+  declarations: [IpComponent],
+  exports: [IpComponent],
   providers: [IpService],
 })
 export class IpModule {}

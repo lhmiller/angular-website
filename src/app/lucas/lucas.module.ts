@@ -9,5 +9,6 @@ import { LucasComponent } from './lucas.component';
     LucasRoutingModule,
   ],
   declarations: [LucasComponent],
+  exports: [LucasComponent],
 })
 export class LucasModule {}

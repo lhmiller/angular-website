@@ -6,6 +6,8 @@ import weatherData from './playground/weather-response';
 import { TitleService } from '../shared/title.service';
 import { CacheService } from '../shared/cache.service';
 
+const MOCK_COORDS = '35.2555507,-120.6849783';
+
 class MockGeolocationService {
   getAddress = () => {
     const lat = 35.3579;
@@ -18,15 +20,22 @@ class MockGeolocationService {
     return of(weatherData);
   }
 
-  getCurrentPosition = () => of('35.2555507,-120.6849783');
+  getCurrentPosition = () => of(MOCK_COORDS);
 
   getLocationName = () => of('San Luis Obispo');
 }
 
 class MockCacheService {
-  get = () => {};
-  valueChanged = () => false;
-  isExpired = () => false;
+  get = (key: string) => {
+    if (key === 'LOCATION_DATA') {
+      return { coords: MOCK_COORDS, name: 'Somewhere' };
+    } else {
+      return null;
+    }
+  }
+  set = () => {};
+  valueChangedOrExpired = () => false;
+  isExpired = () => true;
 }
 
 class MockTitleService {

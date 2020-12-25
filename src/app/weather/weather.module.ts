@@ -12,6 +12,7 @@ import { WeatherComponent } from './weather.component';
     WeatherRoutingModule,
   ],
   declarations: [WeatherComponent],
+  exports: [WeatherComponent],
   providers: [GeolocationService],
 })
 export class WeatherModule {}
