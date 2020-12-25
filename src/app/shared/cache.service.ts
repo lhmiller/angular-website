@@ -38,6 +38,9 @@ export class CacheService<T> {
   valueChanged = (key: string, comparatorFn: (oldValue: T) => boolean) =>
     comparatorFn(this.get(key))
 
+  valueChangedOrExpired = (key: string, comparatorFn: (oldValue: T) => boolean) =>
+    this.valueChanged(key, comparatorFn) || this.isExpired(key)
+
   length = () => this.storageService.length();
 
   private getCommonVars = (key: string) => ({

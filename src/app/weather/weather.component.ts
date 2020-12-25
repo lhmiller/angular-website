@@ -71,8 +71,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
       .subscribe((coords: string) => {
         const valueChanged = (oldValue: CachedLocationData) =>
           !oldValue || !this.fuzzyMatchCoords(coords, oldValue.coords);
-        if (this.cacheService.valueChanged(LOCATION_DATA_KEY, valueChanged)
-            || this.cacheService.isExpired(LOCATION_DATA_KEY)
+        if (this.cacheService.valueChangedOrExpired(LOCATION_DATA_KEY, valueChanged)
             || forceUpdate) {
           // new location - save coords & get weather
           this.checkForNewWeatherData(coords, this.locationName, true);

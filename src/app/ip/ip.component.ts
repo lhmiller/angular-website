@@ -40,8 +40,8 @@ export class IpComponent implements OnInit, OnDestroy {
               private titleService: TitleService) {}
 
   ngOnInit() {
-    const ip = this.activatedRoute.snapshot.paramMap.get('ip');
-    this.isOwnIp = !ip;
+    const ip = this.activatedRoute.snapshot.paramMap.get('ip') || 'self';
+    this.isOwnIp = ip === 'self';
     this.getIpData(ip);
     this.titleService.setTitle('IP Lookup');
   }
@@ -52,11 +52,21 @@ export class IpComponent implements OnInit, OnDestroy {
   }
 
   getIpData = (ipAddress: string) => {
-    const valueChanged = (oldValue: CachedIpData) =>
-      !oldValue || (ipAddress === oldValue.ipAddress);
-    if (this.cacheService.valueChanged(IP_DATA_KEY, valueChanged)
-        || this.cacheService.isExpired(IP_DATA_KEY)) {
+    const valueChanged = (oldValue: CachedIpData) => {
+      if (!oldValue) {
+        // no cached value
+        return false;
+      } else if (ipAddress === 'self') {
+        // looking up own ip & has cached value, don't need to reload
+        return true;
+      }
+      return ipAddress !== oldValue.ipAddress;
+    };
+    if (this.cacheService.valueChangedOrExpired(IP_DATA_KEY, valueChanged)) {
       // if new ip address, or cached value expired, save new value
+      if (ipAddress === 'self') {
+        ipAddress = '';
+      }
       this.ipService.getIpInfo(ipAddress)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe((ipData: IpData) => {

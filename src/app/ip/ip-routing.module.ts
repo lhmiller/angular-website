@@ -3,13 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IpComponent } from './ip.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    children: [
-      { path: '', component: IpComponent },
-      { path: ':ip', component: IpComponent },
-    ]
-  },
+  { path: '', component: IpComponent },
+  { path: ':ip', component: IpComponent },
 ];
 
 @NgModule({

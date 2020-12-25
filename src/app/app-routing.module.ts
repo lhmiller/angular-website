@@ -18,6 +18,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./lucas/lucas.module').then(m => m.LucasModule),
   },
+  { path: '**', redirectTo: '' }, // redirect 404s to the homepage
 ];
 
 @NgModule({
