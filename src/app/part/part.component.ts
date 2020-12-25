@@ -17,7 +17,7 @@ export class PartComponent implements OnInit {
   constructor(private titleService: TitleService) {}
 
   ngOnInit() {
-    this.partNum = new FormControl('', this.partNumberValidator);
+    this.partNum = new FormControl('32132132132', this.partNumberValidator);
     this.partNum.valueChanges.subscribe(() => {
       this.makeLinks();
     });

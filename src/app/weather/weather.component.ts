@@ -6,11 +6,10 @@ import { GeolocationService } from './services/geolocation.service';
 import { TitleService } from '../shared/title.service';
 import { CacheService } from '../shared/cache.service';
 
-// TODO adjust to Lucas' liking
 const WEATHER_DATA_KEY = 'WEATHER_DATA';
-const WEATHER_DATA_TTL_MS = 5 * 60 * 1000; // 5 mins
+const WEATHER_DATA_TTL_MS = 2 * 60 * 1000; // 2 mins
 const LOCATION_DATA_KEY = 'LOCATION_DATA';
-const LOCATION_DATA_TTL_MS = 60 * 60 * 1000; // 1 hour
+const LOCATION_DATA_TTL_MS = 5 * 60 * 1000; // 5 mins
 
 interface CachedLocationData {
   coords: string;
