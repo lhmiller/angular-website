@@ -12,7 +12,30 @@ const START_OFFSET_MS = 200;
 export class LucasComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement: ElementRef<HTMLCanvasElement>;
   letters = 'Lucas Miller';
-  count = 0;
+  buttons = [
+    {
+      name: 'Resume',
+      // TODO add pdf viewer
+      link: 'pdfjs/web/viewer.html?file=/assets/doc/Resume.pdf'
+    },
+    {
+      name: 'LinkedIn',
+      link: 'https://www.linkedin.com/in/lucasmiller1'
+    },
+    {
+      name: 'Github',
+      link: 'https://www.github.com/lhmiller'
+    },
+    {
+      name: 'Portfolium',
+      link: 'https://portfolium.com/lucasmiller1'
+    },
+    {
+      name: 'Email',
+      link: 'mailto:lhmiller@calpoly.edu'
+    },
+  ];
+  private lettersCount = 0;
   private canvas: CanvasRenderingContext2D;
   private timeouts: number[] = [];
 
@@ -34,11 +57,17 @@ export class LucasComponent implements OnInit, OnDestroy {
   }
 
   animateLetters = () => {
-    this.count = 0;
+    this.lettersCount = 0;
     const timeoutMs = LOAD_TIME_MS / this.letters.length;
     for (let i = 0; i < this.letters.length; i++) {
+      const isLast = i === this.letters.length - 1;
       const timeout = setTimeout(() => {
-        this.count++;
+        this.lettersCount++;
+        if (isLast) {
+          for (const oldTimeout of this.timeouts) {
+            clearTimeout(oldTimeout);
+          }
+        }
       }, i * timeoutMs + START_OFFSET_MS) as unknown as number;
       this.timeouts.push(timeout);
     }
@@ -47,7 +76,7 @@ export class LucasComponent implements OnInit, OnDestroy {
   mapLettersToHTML = () => this.letters.split('').map((letter: string) => letter === ' ' ? '&nbsp;' : letter);
 
   isTriggeredClass = (i: number) =>
-    i < this.count ? 'lucas__triggered' : 'lucas__notTriggered'
+    `lucas__${i < this.lettersCount ? 'triggered' : 'notTriggered'}`
 
   private updateCanvas = () => {
     const {

@@ -1,13 +1,33 @@
 <div class="lucas">
-  <div
-    (click)="animateLetters()"
-    class="lucas__letters">
-    <span
-      *ngFor="let letter of mapLettersToHTML(); let i = index"
-      [innerHTML]="letter"
-      [ngClass]="isTriggeredClass(i)"
-      class="lucas__letter">
-    </span>
+  <div class="lucas__info">
+    <div (click)="animateLetters()">
+      <span
+        *ngFor="let letter of mapLettersToHTML(); let i = index"
+        [innerHTML]="letter"
+        [ngClass]="isTriggeredClass(i)"
+        class="lucas__letter">
+      </span>
+    </div>
+    <div>
+      Wireless Network Delivery Analyst | Infrastructure and Platform Services Operations
+    </div>
+    <div>
+      Information Technology Services
+    </div>
+    <div>
+      California Polytechnic State University, San Luis Obispo
+    </div>
+    <div class="lucas__buttons btn-group">
+      <a
+        *ngFor="let button of buttons"
+        [href]="button.link"
+        target='_blank'
+        rel='noopener noreferrer'
+        class="btn btn-dark"
+        role="button">
+        {{ button.name }}
+      </a>
+    </div>
   </div>
 </div>
 <canvas
