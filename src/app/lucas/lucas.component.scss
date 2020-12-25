@@ -13,12 +13,14 @@ $selectionColor: rgba(151, 0, 0, 0.8);
   background: $backgroundGradient;
   display: flex;
   justify-content: center;
+  position: relative;
 
   &__letters {
     background: $textBackgroundColor;
     border: 1px solid black;
     border-radius: 10px;
     padding: 10px 25px;
+    z-index: 2;
   }
 
   &__letter {
@@ -38,6 +40,16 @@ $selectionColor: rgba(151, 0, 0, 0.8);
   
   &__triggered {
     animation: fadeIn 0.5s ease;
+  }
+
+  &__canvas {
+    bottom: 0;
+    left: 0;
+    opacity: 0.420;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
   }
 }
 
