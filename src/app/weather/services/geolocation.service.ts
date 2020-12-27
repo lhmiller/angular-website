@@ -12,7 +12,6 @@ export class GeolocationService {
   getWeather = (coordinates: string) => {
     return this.http.get(environment.weatherBaseUrl + coordinates).pipe(
       map((data: WxData) => {
-        console.log('WEATHER', data);
         return data;
       })
     );
@@ -26,8 +25,6 @@ export class GeolocationService {
         const lat = data.results[0].geometry.location.lat;
         const long = data.results[0].geometry.location.lng;
         const address = data.results[0].formatted_address;
-        console.log('ADDRESS', data.results[0]);
-        console.log(lat, long, address);
         return { lat, long, address };
       })
     );

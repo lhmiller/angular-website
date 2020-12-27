@@ -24,15 +24,15 @@ interface CachedLocationData {
 export class WeatherComponent implements OnInit, OnDestroy {
   locationDropdownOptions = [
     {
-      text: 'Lima',
+      name: 'Lima',
       coords: '35.2555507,-120.6849783',
     },
     {
-      text: 'Poly',
+      name: 'Poly',
       coords: '35.298539,-120.664545',
     },
     {
-      text: 'Oak',
+      name: 'Oak',
       coords: '35.416493,-120.609561',
     },
   ];
@@ -65,6 +65,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
     if (forceUpdate) {
       this.locationName = '';
     }
+    this.isLoading = true;
 
     this.geolocationService.getCurrentPosition()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -74,13 +75,12 @@ export class WeatherComponent implements OnInit, OnDestroy {
         if (this.cacheService.valueChangedOrExpired(LOCATION_DATA_KEY, valueChanged)
             || forceUpdate) {
           // new location - save coords & get weather
-          this.checkForNewWeatherData(coords, this.locationName, true);
+          this.checkForNewWeatherData(coords, '', true);
           const cacheEntry: CachedLocationData = {
             coords,
             name: this.locationName,
           };
           this.cacheService.set(LOCATION_DATA_KEY, cacheEntry, LOCATION_DATA_TTL_MS);
-          this.isLoading = true;
           // update location name since coords have changed
           this.updateLocationName(coords);
         } else {
@@ -91,12 +91,16 @@ export class WeatherComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkForNewWeatherData = (coords: string, locationName: string, forceUpdate = false) => {
+  checkForNewWeatherData = (coords: string, locationName = '', forceUpdate = false) => {
     if (!coords) {
       this.checkForNewLocation();
       return;
-    } else {
+    }
+
+    if (locationName) {
       this.setLocationName(locationName);
+    } else {
+      this.updateLocationName(coords);
     }
 
     if (this.cacheService.isExpired(WEATHER_DATA_KEY) || forceUpdate) {
@@ -109,29 +113,35 @@ export class WeatherComponent implements OnInit, OnDestroy {
           this.setWeatherData(data);
           this.cacheService.set(WEATHER_DATA_KEY, data, WEATHER_DATA_TTL_MS);
           this.isLoading = false;
+        }, () => {
+          // error handler
+          this.isLoading = false;
         });
     } else {
       // else (weather data not expired) use stored value
       this.setWeatherData(this.cacheService.get(WEATHER_DATA_KEY) as WxData);
-      this.setLocationName(locationName);
-      this.updateLocationName(coords);
+      this.isLoading = false;
     }
   }
 
   wxEntry = () => {
     const newLocationName = prompt('Please enter a place.', '');
-    if (!newLocationName) {
-      return;
+    if (newLocationName) {
+      this.setLocationName(newLocationName);
+      this.isLoading = true;
+
+      this.geolocationService.getAddress(newLocationName)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(({ lat, long, address }) => {
+          const coords = `${lat},${long}`;
+          const cacheEntry: CachedLocationData = {
+            coords,
+            name: address,
+          };
+          this.cacheService.set(LOCATION_DATA_KEY, cacheEntry, LOCATION_DATA_TTL_MS);
+          this.checkForNewWeatherData(coords, '', true);
+        });
     }
-
-    this.setLocationName(newLocationName);
-    this.isLoading = true;
-
-    this.geolocationService.getAddress(this.locationName)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(({ lat, long, address }) => {
-        this.checkForNewWeatherData(`${lat},${long}`, address, true);
-      });
   }
 
   getHourTitle = (element: any, i: number) => {
@@ -228,7 +238,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
     if (!locationName) {
       return 'Getting Location...';
     } else if (isLoading) {
-      return `Loading ${locationName}...`;
+      return `Loading Weather...`;
     } else {
       return locationName;
     }
@@ -277,8 +287,10 @@ export class WeatherComponent implements OnInit, OnDestroy {
         this.setLocationName(locationName);
 
         const cachedLocationData = this.cacheService.get(LOCATION_DATA_KEY) as CachedLocationData;
-        const cacheEntry = Object.assign({}, cachedLocationData, { name: locationName });
-        this.cacheService.set(LOCATION_DATA_KEY, cacheEntry, LOCATION_DATA_TTL_MS);
+        if (cachedLocationData) {
+          const cacheEntry = Object.assign({}, cachedLocationData, { name: locationName });
+          this.cacheService.set(LOCATION_DATA_KEY, cacheEntry, LOCATION_DATA_TTL_MS);
+        }
       });
   }
 

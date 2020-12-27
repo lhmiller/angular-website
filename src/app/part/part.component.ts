@@ -34,7 +34,6 @@ export class PartComponent implements OnInit {
       this.part = '';
       this.group = '';
     }
-    console.log(this.part, this.group);
   }
 
   searchSite = (searchUrl: string) => {

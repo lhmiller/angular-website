@@ -213,8 +213,8 @@
         <button
           *ngFor="let option of locationDropdownOptions"
           ngbDropdownItem
-          (click)="checkForNewWeatherData(option.coords, option.text, true)">
-          {{ option.text }}
+          (click)="checkForNewWeatherData(option.coords, option.name, true)">
+          {{ option.name }}
         </button>
       </div>
     </div>
