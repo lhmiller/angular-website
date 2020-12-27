@@ -285,6 +285,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((locationName: string) => {
         this.setLocationName(locationName);
+        this.titleService.setTitle(`Weather in ${locationName}`);
 
         const cachedLocationData = this.cacheService.get(LOCATION_DATA_KEY) as CachedLocationData;
         if (cachedLocationData) {
