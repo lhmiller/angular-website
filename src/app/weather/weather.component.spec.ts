@@ -15,8 +15,7 @@ class MockGeolocationService {
 class MockCacheService {
   get = (s) => s === 'LOCATION_DATA' ? { coords: '' } : null;
   set = () => {};
-  valueChanged = () => false;
-  isExpired = () => false;
+  valueChangedOrExpired = () => false;
 }
 
 class MockTitleService {

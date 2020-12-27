@@ -27,8 +27,7 @@ class MockCacheService {
       country: 'country',
     }
   })
-  valueChanged = () => false;
-  isExpired = () => false;
+  valueChangedOrExpired = () => false;
 }
 
 class MockTitleService {
