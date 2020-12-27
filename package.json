@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "playground": "angular-playground"
+    "playground": "angular-playground",
+    "s3": "ng build --prod && ./upload_to_s3.sh"
   },
   "private": true,
   "dependencies": {
