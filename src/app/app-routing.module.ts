@@ -11,11 +11,16 @@ const routes: Routes = [
     loadChildren: () => import('./part/part.module').then(m => m.PartModule),
   },
   {
+    path: 'resume',
+    loadChildren: () => import('./pdf-viewer/pdf-viewer.module').then(m => m.PdfViewerModule),
+  },
+  {
     path: 'weather',
     loadChildren: () => import('./weather/weather.module').then(m => m.WeatherModule),
   },
   {
     path: '',
+    pathMatch: 'full',
     loadChildren: () => import('./lucas/lucas.module').then(m => m.LucasModule),
   },
   { path: '**', redirectTo: '' }, // redirect 404s to the homepage

@@ -1,0 +1,11 @@
+@import 'src/scss/mixins';
+
+.pdfViewer {
+  @include componentBase;
+  overflow: hidden;
+  padding: 0;
+
+  & ::ng-deep iframe {
+    border: 0;
+  }
+}

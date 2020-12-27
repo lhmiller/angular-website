@@ -14,25 +14,24 @@ export class LucasComponent implements OnInit, OnDestroy {
   letters = 'Lucas Miller';
   buttons = [
     {
-      name: 'Resume',
-      // TODO add pdf viewer
-      link: 'pdfjs/web/viewer.html?file=/assets/doc/Resume.pdf',
-    },
-    {
       name: 'LinkedIn',
-      link: 'https://www.linkedin.com/in/lucasmiller1',
+      href: 'https://www.linkedin.com/in/lucasmiller1',
+      target: '_blank',
     },
     {
       name: 'Github',
-      link: 'https://www.github.com/lhmiller',
+      href: 'https://www.github.com/lhmiller',
+      target: '_blank',
     },
     {
       name: 'Portfolium',
-      link: 'https://portfolium.com/lucasmiller1',
+      href: 'https://portfolium.com/lucasmiller1',
+      target: '_blank',
     },
     {
       name: 'Email',
-      link: 'mailto:lhmiller@calpoly.edu',
+      href: 'mailto:lhmiller@calpoly.edu',
+      target: '_top',
     },
   ];
   private lettersCount = 0;
@@ -76,7 +75,7 @@ export class LucasComponent implements OnInit, OnDestroy {
   mapLettersToHTML = () => this.letters.split('').map((letter: string) => letter === ' ' ? '&nbsp;' : letter);
 
   isTriggeredClass = (i: number) =>
-    `lucas__${i < this.lettersCount ? 'triggered' : 'notTriggered'}`
+    `lucas__title--${i < this.lettersCount ? 'triggered' : 'notTriggered'}`
 
   private updateCanvas = () => {
     const {
